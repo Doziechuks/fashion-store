@@ -18,7 +18,7 @@ const MobileFooter = () => {
           <Link to="/">FASHIONSTORE</Link>
           <p>&copy; Copyright 2023, All RightS Reserved</p>
         </div>
-        <hr className={styles.line} />
+        <div className={styles.line} />
         <div className={styles.box2}>
           <h4>Follow us</h4>
           <div>
