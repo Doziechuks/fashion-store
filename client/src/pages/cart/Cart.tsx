@@ -23,22 +23,22 @@ const cartItems: {
   vendor: string;
   img: string;
 }[] = [
-  // {
-  //   id: 1,
-  //   title: "man fine plane trouser pant",
-  //   price: 30,
-  //   desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur",
-  //   vendor: "my quality seller",
-  //   img: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=600",
-  // },
-  // {
-  //   id: 2,
-  //   title: "man fine stock jeans jacket",
-  //   price: 500,
-  //   desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur  harum cum minima, perferendis porro tenetur",
-  //   vendor: "my quality seller",
-  //   img: "https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=600",
-  // },
+  {
+    id: 1,
+    title: "man fine plane trouser pant",
+    price: 30,
+    desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur",
+    vendor: "my quality seller",
+    img: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=600",
+  },
+  {
+    id: 2,
+    title: "man fine stock jeans jacket",
+    price: 500,
+    desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur  harum cum minima, perferendis porro tenetur",
+    vendor: "my quality seller",
+    img: "https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=600",
+  },
 ];
 
 const Cart = ({ price }: CartProps) => {
