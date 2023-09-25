@@ -19,7 +19,7 @@ interface CardProps {
     oldPrice: number;
     isNew?: boolean;
   };
-  isList?: string;
+  isList?: boolean;
   price: string;
 }
 

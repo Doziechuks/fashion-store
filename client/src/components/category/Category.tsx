@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Category.module.less";
 import { Link } from "react-router-dom";
 import { handleScrollTop } from "../../utility/scrollToTop";

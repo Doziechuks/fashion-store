@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./CategoryList.module.css";
 import Card from "../card/Card";
 
@@ -75,6 +74,9 @@ const data: Product[] = [
 
 const CategoryList = (props: CategoryFilter) => {
   const { catId, sort, maxPrice, selectedCat } = props;
+
+  console.log({ catId, sort, maxPrice, selectedCat });
+
   return (
     <main className={styles.container}>
       {data.map((item) => (

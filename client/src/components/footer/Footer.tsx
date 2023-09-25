@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Footer.module.less";
 import { Link, useNavigate } from "react-router-dom";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
