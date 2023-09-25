@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./ScrollToTop.module.less";
 import { handleScrollTop } from "../../utility/scrollToTop";
 
