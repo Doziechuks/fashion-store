@@ -1,0 +1,52 @@
+.scrollTopBtnWrap {
+  /* border: 1px red solid; */
+  width: 100%;
+  max-width: 3rem;
+  height: 3rem;
+  background-color: #0582ff;
+  border-radius: 0.5rem;
+  position: fixed;
+  z-index: 10;
+  bottom: -5rem;
+  right: 3rem;
+  transform: rotate(-15deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 0.3em 0.5em rgba(0, 0, 0, 0.3);
+  transition: all 0.5s ease-in-out;
+}
+.showBtn {
+  bottom: 5rem;
+}
+.scrollTopBtnInner {
+  /* border: 1px red solid; */
+  transform: rotate(15deg);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.btn {
+  border: 3px #fff solid;
+  width: 37%;
+  height: 37%;
+  transform: rotate(45deg);
+  border-right: none;
+  border-bottom: none;
+  position: absolute;
+  top: 40%;
+}
+@media screen and (max-width: 100) {
+  .scrollTopBtnWrap {
+    right: 1rem;
+  }
+  .showBtn {
+    bottom: 2rem;
+  }
+}

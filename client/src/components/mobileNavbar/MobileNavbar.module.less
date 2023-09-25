@@ -1,0 +1,162 @@
+.container {
+  // border: 1px red solid;
+  display: none;
+  @media (max-width: 1000px) {
+    display: block;
+    width: 100%;
+    min-height: 3.5rem;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: #fff;
+  }
+  .wrapper {
+    // border: 1px red solid;
+    width: 100%;
+    max-width: 95%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    .left {
+      // border: 1px red solid;
+      width: 100%;
+      max-width: 3.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      div {
+        // border: 1px red solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    .center {
+      // border: 1px red solid;
+      width: fit-content;
+      a {
+        color: #000;
+        font-family: "Open Sans", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        font-weight: 600;
+        @media (min-width: 700px) {
+          font-size: 1.3rem;
+        }
+      }
+    }
+    .right {
+      // border: 1px red solid;
+      width: 100%;
+      max-width: 3.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      div {
+        // border: 1px red solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .cartBox {
+        position: relative;
+        // color: red;
+        .cartCircle {
+          width: 1.2rem;
+          height: 1.2rem;
+          border-radius: 50%;
+          font-size: 0.6rem;
+          background-color: lightgray;
+          position: absolute;
+          top: -0.8rem;
+          left: 0.8rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          @media (min-width: 700px) {
+            width: 1.4rem;
+            height: 1.4rem;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+  .wrapper2 {
+    width: 100%;
+    // border: 1px red solid;
+    background-color: #e6e6e6;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .exchange {
+      // border: 1px red solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-right: 2rem;
+      cursor: pointer;
+      span {
+        font-size: 1rem;
+      }
+      div {
+        // border: 1px red solid;
+        width: 1.3rem;
+        height: 1.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    a {
+      padding: 0 0.1rem;
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 0.9rem;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+  .currencyBox {
+    // border: 1px red solid;
+    width: fit-content;
+    min-width: 5rem;
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    background: #e6e6e6;
+    position: fixed;
+    left: 2.3rem;
+    top: 5.7rem;
+    z-index: 10;
+    span {
+      cursor: pointer;
+      // border: 1px red solid;
+      font-size: 0.9rem;
+      width: 100%;
+      text-align: center;
+      letter-spacing: 0.5px;
+      transition: all 0.5s ease-in-out;
+      &:hover {
+        background: #fff;
+      }
+    }
+  }
+}

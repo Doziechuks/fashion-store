@@ -1,0 +1,86 @@
+.container {
+  // border: 1px red solid;
+  width: 100%;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  .wrapper {
+    // border: 1px red solid;
+    width: 100%;
+    max-width: 25rem;
+    background-color: #fff;
+    padding: 1rem;
+    @media screen and (max-width: 500px) {
+      max-width: 18rem;
+    }
+    .heading {
+      // border: 1px red solid;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      h4 {
+        width: 100%;
+        color: #333;
+        text-transform: capitalize;
+        font-family: "Open Sans", sans-serif;
+        font-weight: 400;
+        font-size: 1.3rem;
+        @media screen and (max-width: 500px) {
+          font-size: 1rem;
+        }
+      }
+      div {
+        // border: 1px red solid;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
+    .optionBox {
+      border-bottom: 1px lightgray solid;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      span {
+        // border-bottom: 2px red solid;
+        color: #333;
+        font-size: 1rem;
+        cursor: pointer;
+        &:first-child {
+          margin-right: 2rem;
+        }
+      }
+      .border {
+        border-bottom: 2px #0582ff solid;
+      }
+    }
+    .box {
+      // border: 1px red solid;
+      width: 100%;
+      display: flex;
+      transition: all 1s ease-in-out;
+      overflow: hidden;
+      .signIn {
+        // border: 1px blue solid;
+        width: 100%;
+        flex: 0 0 auto;
+        // transform: translateX(-100%);
+        transition: all 0.5s ease-in-out;
+      }
+    }
+  }
+}

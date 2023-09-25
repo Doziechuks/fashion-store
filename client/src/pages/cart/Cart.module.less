@@ -1,0 +1,197 @@
+.container {
+  // border: 1px red solid;
+  width: 100%;
+  min-height: calc(100vh - 5.5rem);
+  padding: 0 6rem;
+  padding-top: 2rem;
+  @media screen and (max-width: 1120px) {
+    padding: 0 3rem;
+    padding-top: 2rem;
+  }
+  @media screen and (max-width: 1000px) {
+    padding: 0 1rem;
+    padding-top: 2rem;
+    gap: 1rem;
+  }
+  @media screen and (max-width: 740px) {
+    padding: 0;
+    padding-top: 1rem;
+  }
+  .wrapper {
+    // border: 1px red solid;
+    display: flex;
+    gap: 2rem;
+    @media screen and (max-width: 740px) {
+      flex-direction: column-reverse;
+      justify-content: flex-end;
+    }
+    .left {
+      // border: 1px red solid;
+      flex: 3;
+      align-self: flex-start;
+      background: #e6e6e6;
+      padding-bottom: 1rem;
+      h3 {
+        color: #333;
+        font-size: 1.5rem;
+        border-bottom: 1px lightgrey solid;
+        padding: 1rem;
+        font-family: "Open Sans", sans-serif;
+        margin-bottom: 0.5rem;
+      }
+      .cardWrapper {
+        // border: 1px blue solid;
+        width: 100%;
+        max-width: 98%;
+        margin: 0 auto;
+      }
+      @media screen and (max-width: 1000px) {
+        flex: 2.5;
+        h3 {
+          font-size: 1rem;
+        }
+      }
+      @media screen and (max-width: 740px) {
+        flex: 0;
+        width: 100%;
+        h3 {
+          font-size: 0.9rem;
+          padding: 0.5rem 1rem;
+          border-bottom: none;
+          margin-bottom: 0;
+        }
+      }
+    }
+    .right {
+      // border: 1px red solid;
+      flex: 1;
+      align-self: flex-start;
+      background: #e6e6e6;
+      padding-bottom: 0.3rem;
+      position: sticky;
+      top: 6.5rem;
+      h3 {
+        border-bottom: 1px lightgrey solid;
+        padding: 0.3rem;
+        font-family: "Open Sans", sans-serif;
+        margin-bottom: 0.5rem;
+        color: #333;
+      }
+      .subtotalBox {
+        border-bottom: 1px lightgrey solid;
+        width: 100%;
+        padding: 0.3rem;
+        margin-bottom: 1rem;
+        div {
+          // border: 1px red solid;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 0.3rem;
+          span {
+            font-weight: 400;
+            color: #000;
+            font-size: 1.2rem;
+            @media screen and (max-width: 1120px) {
+              font-size: 1rem;
+            }
+          }
+        }
+        .notice {
+          display: block;
+          // border: 1px red solid;
+          width: 100%;
+          color: gray;
+          font-size: 0.9rem;
+          font-style: italic;
+        }
+      }
+      a {
+        width: 100%;
+        max-width: 15rem;
+        margin: 0 auto;
+        padding: 0 1rem;
+        border-radius: 0.3rem;
+        color: #fff;
+        text-align: center;
+        background-color: #0582ff;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.5s ease-in-out;
+        box-shadow: 0 0.3em 0.5em rgba(0, 0, 0, 0.3);
+        &:hover {
+          background: #0761bc;
+        }
+        @media screen and (max-width: 1120px) {
+          max-width: 12rem;
+          font-size: 0.7rem;
+        }
+      }
+      @media screen and (max-width: 1000px) {
+        flex: 1.2;
+        h3 {
+          font-size: 1rem;
+        }
+        .subtotalBox {
+          div {
+            span {
+              font-size: 0.9rem;
+            }
+          }
+          .notice {
+            font-size: 0.7rem;
+          }
+        }
+      }
+      @media screen and (max-width: 740px) {
+        flex: 0;
+        width: 100%;
+        position: static;
+        h3 {
+          font-size: 0.9rem;
+          border-bottom: none;
+        }
+        .subtotalBox {
+          background-color: #fff;
+          border-bottom: none;
+          div {
+            span {
+              font-size: 0.9rem;
+            }
+          }
+          .notice {
+            font-size: 0.7rem;
+          }
+        }
+        a {
+          display: none;
+        }
+      }
+    }
+  }
+  .mobileBtn {
+    display: none;
+    @media screen and (max-width: 740px) {
+      width: 100%;
+      // max-width: 15rem;
+      margin: 0 auto;
+      padding: 0 1rem;
+      border-radius: 0.3rem;
+      color: #fff;
+      text-align: center;
+      background-color: #0582ff;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s ease-in-out;
+      box-shadow: 0 0.3em 0.5em rgba(0, 0, 0, 0.3);
+      position: sticky;
+      bottom: 0;
+      z-index: 50;
+    }
+  }
+}
