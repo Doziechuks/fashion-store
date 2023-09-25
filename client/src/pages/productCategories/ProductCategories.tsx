@@ -139,7 +139,7 @@ const ProductCategories = () => {
           />
         </section>
       </main>
-      <div className={styles.options} style={{ left: open ? "0" : "-30rem" }}>
+      <div className={styles.options} style={{ left: open ? "0" : "-50rem" }}>
         <div className={styles.mobileTop}>
           <h3>women categories</h3>
           <div className={styles.inputWrapper}>
