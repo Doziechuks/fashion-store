@@ -95,6 +95,12 @@ const MobileNavbar = ({ setCurrency, setShowAuth, currency }: AuthProps) => {
           <div>
             <KeyboardArrowDownIcon />
           </div>
+          {open && (
+            <div className={styles.currencyBox}>
+              <span onClick={() => handleCurrencyChange("USD")}>USD</span>
+              <span onClick={() => handleCurrencyChange("NGN")}>NGN</span>
+            </div>
+          )}
         </div>
         <Link
           to="/category/women"
@@ -126,12 +132,12 @@ const MobileNavbar = ({ setCurrency, setShowAuth, currency }: AuthProps) => {
           Children
         </Link>
       </div>
-      {open && (
+      {/* {open && (
         <div className={styles.currencyBox}>
           <span onClick={() => handleCurrencyChange("USD")}>USD</span>
           <span onClick={() => handleCurrencyChange("NGN")}>NGN</span>
         </div>
-      )}
+      )} */}
     </nav>
   );
 };
