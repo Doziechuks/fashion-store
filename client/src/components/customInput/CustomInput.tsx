@@ -7,7 +7,8 @@ const CustomInput: React.FC<CustomInputProps> = ({ isLast, ...others }) => {
   return (
     <input
       {...others}
-      className={`${styles.inputBox} ${isLast ? styles.last : ""}`}
+      className={`${styles.inputBox} ${isLast ? styles.last : ""} 
+      }`}
     />
   );
 };

@@ -1,5 +1,246 @@
 .container {
-  border: 1px red solid;
+  // border: 1px red solid;
   width: 100%;
   min-height: calc(100vh - 5.5rem);
+  display: flex;
+  padding: 0 6rem;
+  padding-top: 2rem;
+  gap: 3.5rem;
+  @media screen and (max-width: 1330px) {
+    padding: 0 2rem;
+    padding-top: 2rem;
+    gap: 2rem;
+  }
+  @media screen and (max-width: 650px) {
+    padding: 0;
+    padding-top: 1rem;
+    flex-direction: column;
+    gap: 0;
+  }
+  .left {
+    // border: 1px red solid;
+    flex: 3;
+    align-self: flex-start;
+    @media screen and (max-width: 650px) {
+      flex: 0;
+      padding: 0 0.8rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .title {
+      color: #333;
+      font-size: 1.5rem;
+      width: 100%;
+      font-family: "Open Sans", sans-serif;
+      text-transform: capitalize;
+      @media screen and (max-width: 1000px) {
+        font-size: 1.1rem;
+      }
+    }
+    .addressBox {
+      // border: 1px blue solid;
+      width: 100%;
+      margin-top: 3rem;
+      // margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      @media screen and (max-width: 650px) {
+        align-items: center;
+        margin-top: 2rem;
+      }
+      p {
+        // border: 1px red solid;
+        width: 100%;
+        color: #333;
+        font-size: 1.1rem;
+        @media screen and (max-width: 1000px) {
+          font-size: 1rem;
+        }
+        @media screen and (max-width: 650px) {
+          font-size: 0.9rem;
+        }
+      }
+      .addressWrapper {
+        border: 1px #333 solid;
+        width: 100%;
+        min-height: 5rem;
+        padding: 0 1.3rem;
+        border-radius: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin: 1.2rem 0;
+        @media screen and (max-width: 650px) {
+          align-items: flex-start;
+          justify-content: flex-start;
+          gap: 0;
+          padding: 1.3rem;
+        }
+        .addressInfo {
+          // border: 1px red solid;
+          display: flex;
+          width: 100%;
+          align-items: center;
+          gap: 2rem;
+          @media screen and (max-width: 650px) {
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 0;
+            margin-left: 1rem;
+          }
+          h5 {
+            // border: 1px red solid;
+            font-size: 1rem;
+            text-transform: capitalize;
+            letter-spacing: 1px;
+            color: #333;
+            @media screen and (max-width: 1000px) {
+              font-size: 0.9rem;
+            }
+          }
+          span {
+            // border: 1px red solid;
+            width: 100%;
+            max-width: fit-content;
+            @media screen and (max-width: 1000px) {
+              font-size: 0.8rem;
+            }
+          }
+          .address {
+            max-width: 20rem;
+            @media screen and (max-width: 650px) {
+              max-width: 100%;
+              margin: 1rem 0;
+            }
+          }
+        }
+      }
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 15rem;
+        height: 3rem;
+        border: 1px #333 solid;
+        border-radius: 0.3rem;
+        background-color: transparent;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+          opacity: 0.5;
+        }
+        span {
+          margin-right: 1rem;
+          font-size: 1rem;
+          color: #333;
+          text-transform: capitalize;
+          letter-spacing: 0.5px;
+          font-weight: bold;
+          @media screen and (max-width: 1000px) {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+  .right {
+    // border: 1px red solid;
+    flex: 1;
+    align-self: flex-start;
+    @media screen and (max-width: 1330px) {
+      flex: 1.5;
+    }
+    @media screen and (max-width: 650px) {
+      flex: 0;
+      padding: 0 0.8rem;
+      width: 100%;
+      border-top: 1px solid lightgray;
+    }
+    .title {
+      display: block;
+      color: #333;
+      font-size: 1.5rem;
+      width: 100%;
+      text-transform: capitalize;
+      margin-bottom: 1.5rem;
+      @media screen and (max-width: 650px) {
+        margin-bottom: 0.7rem;
+        font-size: 1.1rem;
+      }
+    }
+    .itemSummary {
+      // border: 1px red solid;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      img {
+        // border: 1px red solid;
+        display: block;
+        height: 4rem;
+        width: 3.5rem;
+        object-fit: cover;
+        @media screen and (max-width: 650px) {
+          height: 3.5rem;
+          width: 3rem;
+        }
+      }
+      span {
+        color: #333;
+        font-size: 1.2rem;
+        @media screen and (max-width: 650px) {
+          font-size: 0.9rem;
+        }
+      }
+    }
+    .total {
+      // border: 1px red solid;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      span {
+        color: #333;
+        font-size: 1.2rem;
+        font-weight: bold;
+        &:first-child {
+          text-transform: capitalize;
+        }
+        @media screen and (max-width: 650px) {
+          font-size: 1rem;
+        }
+      }
+    }
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 80%;
+      margin: 0 auto;
+      height: 3rem;
+      border: 1px #333 solid;
+      border-radius: 0.3rem;
+      background-color: #000;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.1s ease-in-out;
+      &:hover {
+        opacity: 0.5;
+      }
+      span {
+        margin-right: 1rem;
+        font-size: 1rem;
+        color: #fff;
+        text-transform: capitalize;
+        letter-spacing: 0.5px;
+        // font-weight: bold;
+      }
+    }
+  }
 }

@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./NewsLetter.module.less";
+import { useLocation } from "react-router-dom";
 
 const NewLetter = () => {
   const [email, setEmail] = useState("");
+  const [pathName, setPathName] = useState("");
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    setPathName(pathname);
+  }, [pathname]);
+
   return (
-    <main className={styles.container}>
+    <main
+      className={styles.container}
+      style={{ display: pathName === "/" ? "flex" : "none" }}
+    >
       <div className={styles.title}>subscribe to our news letter:</div>
       <div className={styles.inputBox}>
         <input

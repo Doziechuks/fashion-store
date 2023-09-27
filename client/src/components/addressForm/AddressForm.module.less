@@ -1,0 +1,62 @@
+.container {
+  // border: 1px red solid;
+  width: 100%;
+  max-width: 70%;
+  margin-top: 3rem;
+  @media screen and (max-width: 650px) {
+    max-width: 100%;
+  }
+  .titleBox {
+    width: 100%;
+    // border: 1px red solid;
+    margin-bottom: 1.5rem;
+    @media screen and (max-width: 650px) {
+      margin-bottom: 1rem;
+    }
+    h2 {
+      color: #333;
+      font-size: 1.5rem;
+      width: 100%;
+      font-family: "Open Sans", sans-serif;
+      text-transform: capitalize;
+      margin-bottom: 0.5rem;
+      @media screen and (max-width: 1000px) {
+        font-size: 1rem;
+      }
+      @media screen and (max-width: 650px) {
+        font-size: 1rem;
+        margin-bottom: 0rem;
+      }
+    }
+    span {
+      color: #333;
+      @media screen and (max-width: 1000px) {
+        font-size: 0.8rem;
+      }
+    }
+  }
+  .formWrapper {
+    border: 1px #333 solid;
+    width: 100%;
+    padding: 1rem;
+    @media screen and (max-width: 650px) {
+      padding: 0.5rem;
+    }
+    .addressBox {
+      // border: 1px red solid;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      @media screen and (max-width: 650px) {
+        margin-bottom: 1rem;
+        gap: 1rem;
+      }
+    }
+  }
+}
