@@ -10,6 +10,7 @@ import { roundNumber } from "../../utility/roundNumber";
 import CartCard from "../../components/cartCart/CartCard";
 import Empty from "../empty/Empty";
 import { Seo } from "../../utility/seo";
+import { handleScrollTop } from "../../utility/scrollToTop";
 
 interface CartProps {
   price: string;
@@ -93,10 +94,16 @@ const Cart = ({ price }: CartProps) => {
                   Delivery fees not included yet
                 </span>
               </div>
-              <Link to="/checkout">PROCEED TO CHECKOUT</Link>
+              <Link to="/checkout" onClick={handleScrollTop}>
+                PROCEED TO CHECKOUT
+              </Link>
             </section>
           </section>
-          <Link to="/checkout" className={styles.mobileBtn}>
+          <Link
+            to="/checkout"
+            onClick={handleScrollTop}
+            className={styles.mobileBtn}
+          >
             PROCEED TO CHECKOUT
           </Link>
         </main>

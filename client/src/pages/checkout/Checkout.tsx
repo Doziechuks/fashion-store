@@ -9,6 +9,7 @@ import { createStructuredSelector } from "reselect";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
 import { roundNumber } from "../../utility/roundNumber";
 import AddressForm from "../../components/addressForm/AddressForm";
+import CheckoutButton from "../../components/checkoutButton/CheckoutButton";
 interface CheckoutProps {
   price: string;
 }
@@ -44,10 +45,11 @@ const Checkout = ({ price }: CheckoutProps) => {
                 <span>08100278354</span>
               </div>
             </div>
-            <button onClick={() => setShowAddress(false)}>
-              <span>add new address</span>
-              <AddOutlinedIcon sx={{ color: "#333" }} />
-            </button>
+            <CheckoutButton
+              onClick={() => setShowAddress(false)}
+              icon={<AddOutlinedIcon sx={{ color: "#333" }} />}
+              title="add new address"
+            />
           </div>
         ) : (
           <AddressForm setShowAddress={setShowAddress} />
@@ -82,10 +84,11 @@ const Checkout = ({ price }: CheckoutProps) => {
             {roundNumber(3000)}
           </span>
         </div>
-        <button>
-          <span>proceed to payment</span>
-          <ChevronRightOutlinedIcon sx={{ color: "#fff" }} />
-        </button>
+        <CheckoutButton
+          icon={<ChevronRightOutlinedIcon sx={{ color: "#fff" }} />}
+          title="proceed to payment"
+          isProceed
+        />
       </section>
     </main>
   );
