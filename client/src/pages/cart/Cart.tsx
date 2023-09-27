@@ -73,6 +73,7 @@ const Cart = ({ price }: CartProps) => {
               <div className={styles.cardWrapper}>
                 {cartItems.map((item, index) => (
                   <CartCard
+                    key={item.id}
                     item={item}
                     cartLength={cartItems.length}
                     itemIndex={index}
