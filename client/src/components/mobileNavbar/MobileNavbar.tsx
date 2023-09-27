@@ -33,7 +33,7 @@ const MobileNavbar = ({ setCurrency, setShowAuth, currency }: AuthProps) => {
 
   const handleCurrencyChange = (newCurrency: string) => {
     setCurrency(newCurrency);
-    setOpen(false);
+    // setOpen(false);
   };
 
   useEffect(() => {
@@ -55,6 +55,9 @@ const MobileNavbar = ({ setCurrency, setShowAuth, currency }: AuthProps) => {
   useEffect(() => {
     setPathName(pathname);
   }, [pathname]);
+
+  // console.log({ open });
+
   return (
     <nav className={styles.container}>
       <div className={styles.wrapper}>
