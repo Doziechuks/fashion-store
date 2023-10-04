@@ -43,7 +43,7 @@ const Signin = () => {
         <CustomInput
           placeholder="Password"
           name="password"
-          type="password"
+          type={isVisible ? "text" : "password"}
           value={user.password}
           onChange={handleChange}
           required
