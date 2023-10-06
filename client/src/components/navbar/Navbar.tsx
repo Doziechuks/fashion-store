@@ -3,12 +3,14 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.less";
 import { Link, useLocation } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
+// import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+// import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { handleScrollTop } from "../../utility/scrollToTop";
+import checkedUser from "../../assets/User_Check.svg";
+import userClose from "../../assets/User_Close.svg";
 
 import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
@@ -17,19 +19,28 @@ import {
   handleCurrencyToggle,
 } from "../../redux/toggleReducer/toggle.action";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
+import { selectUserAuth } from "../../redux/userReducer/user.selector";
+import { handleUserAuth } from "../../redux/userReducer/user.action";
 
 interface AuthProps {
   setShowAuth: () => void;
   currency: string;
   setCurrency: (currency: string) => void;
+  currentUser: object | null;
+  setCurrentUser: (user: object | null) => void;
 }
-const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
+const Navbar = ({
+  setShowAuth,
+  currency,
+  setCurrency,
+  currentUser,
+  setCurrentUser,
+}: AuthProps) => {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [pathName, setPathName] = useState("");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLDivElement | null>(null);
-  const user: boolean = false;
   const { pathname } = useLocation();
 
   const handleCurrencyChange = (newCurrency: string) => {
@@ -42,6 +53,9 @@ const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
   };
   // console.log({ currency });
 
+  const handleLogOut = () => {
+    setCurrentUser(null);
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -78,6 +92,8 @@ const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
   useEffect(() => {
     setPathName(pathname);
   }, [pathname]);
+
+  console.log(currentUser);
 
   return (
     <nav className={styles.container}>
@@ -140,13 +156,16 @@ const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
               onClick={handleSearchOpen}
             />
           </div>
-          <span onClick={() => setShowAuth()}>
-            {user ? (
-              <PersonOutlineIcon sx={{ fontSize: "1.7rem" }} />
-            ) : (
-              <PersonOffOutlinedIcon sx={{ fontSize: "1.7rem" }} />
-            )}
-          </span>
+          {currentUser !== null ? (
+            <div onClick={handleLogOut} className={styles.logout}>
+              <img src={checkedUser} alt="user present" />
+              <span> log out</span>
+            </div>
+          ) : (
+            <span onClick={() => setShowAuth()}>
+              <img src={userClose} alt="no user" />
+            </span>
+          )}
           <span>
             <FavoriteBorderIcon sx={{ fontSize: "1.7rem" }} />
           </span>
@@ -167,10 +186,12 @@ const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
 };
 const mapStateToProps = createStructuredSelector({
   currency: selectToggleCurrency,
+  currentUser: selectUserAuth,
 });
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({
   setShowAuth: () => dispatch(handleToggleAuth()),
   setCurrency: (e: string) => dispatch(handleCurrencyToggle(e)),
+  setCurrentUser: (user: object | null) => dispatch(handleUserAuth(user)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

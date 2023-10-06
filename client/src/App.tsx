@@ -15,6 +15,7 @@ import MobileFooter from "./components/mobileFooter/MobileFooter";
 import NewLetter from "./components/newsLetter/NewLetter";
 import ScrollToTopBtn from "./components/scrollToTopBtn/ScrollToTopBtn";
 import Auth from "./components/auth/Auth";
+import ProtectedRoute from "./helpers/protectedRoute";
 
 // public routes
 const HomePage = lazy(() => import("./pages/home/HomePage"));
@@ -48,7 +49,10 @@ function App({ showAuth }: AuthProps) {
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/category/:id" element={<ProductCategories />} />
           <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route
+            path="/checkout"
+            element={<ProtectedRoute Component={CheckoutPage} />}
+          />
         </Routes>
       </Suspense>
       <NewLetter />

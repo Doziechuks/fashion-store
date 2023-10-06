@@ -1,15 +1,17 @@
 import { combineReducers } from "redux";
 import toggleReducer from "./toggleReducer/toggle.reducer";
+import userReducer from "./userReducer/user.reducer";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["toggle"],
+  whitelist: ["toggle", "user"],
 };
 const rootReducer = combineReducers({
   toggle: toggleReducer,
+  user: userReducer,
 });
 export default persistReducer(persistConfig, rootReducer);
 
