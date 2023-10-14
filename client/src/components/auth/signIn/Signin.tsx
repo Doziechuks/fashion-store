@@ -53,22 +53,43 @@ const Signin = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
           token: data.jwt,
         });
         setShowAuth();
+        setUser(initialUser);
       }
-
-      // console.log(res);
     } catch (error: unknown) {
       if (typeof error === "string") {
-        // console.log(error);
         setError("something went wrong");
-        // setCurrentUser({});
       } else if (error instanceof Error) {
         if (error.message === "Request failed with status code 400") {
           setError("Invalid email or password");
         } else {
           setError("something went wrong");
         }
-        // setCurrentUser({});
-        // console.log(error);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleForgotPassword = async () => {
+    const url = "/auth/forgot-password";
+    try {
+      if (user.identifier.trim() === "") {
+        setError("Please provide your email");
+      }
+      setIsLoading(true);
+      const res = await axiosRequest.post(url, {
+        email: user.identifier,
+      });
+      if (res) {
+        console.log(res);
+      } else {
+        console.log("no response");
+      }
+    } catch (error: unknown) {
+      if (typeof error === "string") {
+        setError("something went wrong");
+        console.log(error);
+      } else if (error instanceof Error) {
+        console.log(error.message);
       }
     } finally {
       setIsLoading(false);
@@ -114,6 +135,9 @@ const Signin = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
         </span>
       </div>
       <CustomButton>SIGN IN</CustomButton>
+      <div className={styles.forgotPassword} onClick={handleForgotPassword}>
+        forgot password?
+      </div>
     </form>
   );
 };

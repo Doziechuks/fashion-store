@@ -5,8 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-// import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-// import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { handleScrollTop } from "../../utility/scrollToTop";
 import checkedUser from "../../assets/User_Check.svg";
@@ -21,13 +19,24 @@ import {
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
 import { selectUserAuth } from "../../redux/userReducer/user.selector";
 import { handleUserAuth } from "../../redux/userReducer/user.action";
+import { selectCartItem } from "../../redux/cartReducer/cart.selector";
 
+interface CartItemProps {
+  id?: number;
+  title: string;
+  img: string;
+  price: number;
+  quantity: number;
+  desc: string;
+  vendor: string;
+}
 interface AuthProps {
   setShowAuth: () => void;
   currency: string;
   setCurrency: (currency: string) => void;
   currentUser: object | null;
   setCurrentUser: (user: object | null) => void;
+  cartItems: CartItemProps[];
 }
 const MobileNavbar = ({
   setCurrency,
@@ -35,6 +44,7 @@ const MobileNavbar = ({
   currency,
   currentUser,
   setCurrentUser,
+  cartItems,
 }: AuthProps) => {
   // const [currency, setCurrency] = useState("USD");
   const [open, setOpen] = useState(false);
@@ -109,7 +119,9 @@ const MobileNavbar = ({
           </div>
           <Link to="/cart" className={styles.cartBox} onClick={handleScrollTop}>
             <ShoppingCartOutlinedIcon />
-            <span className={styles.cartCircle}>0</span>
+            <span className={styles.cartCircle}>
+              {cartItems.length ? cartItems.length : 0}
+            </span>
           </Link>
         </div>
       </div>
@@ -160,12 +172,6 @@ const MobileNavbar = ({
           Children
         </Link>
       </div>
-      {/* {open && (
-        <div className={styles.currencyBox}>
-          <span onClick={() => handleCurrencyChange("USD")}>USD</span>
-          <span onClick={() => handleCurrencyChange("NGN")}>NGN</span>
-        </div>
-      )} */}
     </nav>
   );
 };
@@ -173,6 +179,7 @@ const MobileNavbar = ({
 const mapStateToProps = createStructuredSelector({
   currency: selectToggleCurrency,
   currentUser: selectUserAuth,
+  cartItems: selectCartItem,
 });
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({

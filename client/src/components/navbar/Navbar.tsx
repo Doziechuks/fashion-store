@@ -21,13 +21,24 @@ import {
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
 import { selectUserAuth } from "../../redux/userReducer/user.selector";
 import { handleUserAuth } from "../../redux/userReducer/user.action";
+import { selectCartItem } from "../../redux/cartReducer/cart.selector";
 
+interface CartItemProps {
+  id?: number;
+  title: string;
+  img: string;
+  price: number;
+  quantity: number;
+  desc: string;
+  vendor: string;
+}
 interface AuthProps {
   setShowAuth: () => void;
   currency: string;
   setCurrency: (currency: string) => void;
   currentUser: object | null;
   setCurrentUser: (user: object | null) => void;
+  cartItems: CartItemProps[];
 }
 const Navbar = ({
   setShowAuth,
@@ -35,6 +46,7 @@ const Navbar = ({
   setCurrency,
   currentUser,
   setCurrentUser,
+  cartItems,
 }: AuthProps) => {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -93,7 +105,7 @@ const Navbar = ({
     setPathName(pathname);
   }, [pathname]);
 
-  console.log(currentUser);
+  // console.log(cartItems);
 
   return (
     <nav className={styles.container}>
@@ -171,7 +183,9 @@ const Navbar = ({
           </span>
           <Link to="/cart" className={styles.cartBox} onClick={handleScrollTop}>
             <ShoppingCartOutlinedIcon sx={{ fontSize: "1.7rem" }} />
-            <span className={styles.cartCircle}>0</span>
+            <span className={styles.cartCircle}>
+              {cartItems?.length ? cartItems?.length : 0}
+            </span>
           </Link>
         </div>
       </div>
@@ -187,6 +201,7 @@ const Navbar = ({
 const mapStateToProps = createStructuredSelector({
   currency: selectToggleCurrency,
   currentUser: selectUserAuth,
+  cartItems: selectCartItem,
 });
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({

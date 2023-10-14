@@ -15,44 +15,48 @@ import { createStructuredSelector } from "reselect";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
 import { selectUserAuth } from "../../redux/userReducer/user.selector";
 import { handleToggleAuth } from "../../redux/toggleReducer/toggle.action";
+import { selectCartItem } from "../../redux/cartReducer/cart.selector";
+// import { CartItemProps } from "../../redux/cartReducer/cart.type";
+import { resetCart } from "../../redux/cartReducer/cart.action";
 
+interface CartItemProps {
+  id?: number;
+  title: string;
+  img: string;
+  price: number;
+  quantity: number;
+  desc: string;
+  vendor: string;
+}
 interface CartProps {
   price: string;
   currentUser: object | null;
   setShowAuth: () => void;
+  cartItems: CartItemProps[];
+  resetCart: () => void;
+  // removeItem: (id: CartItemProps) => void;
 }
 
-const cartItems: {
-  id: number;
-  title: string;
-  price: number;
-  desc: string;
-  vendor: string;
-  img: string;
-}[] = [
-  {
-    id: 1,
-    title: "man fine plane trouser pant",
-    price: 30,
-    desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur",
-    vendor: "my quality seller",
-    img: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=600",
-  },
-  {
-    id: 2,
-    title: "man fine stock jeans jacket",
-    price: 500,
-    desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur  harum cum minima, perferendis porro tenetur",
-    vendor: "my quality seller",
-    img: "https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=600",
-  },
-];
-
-const Cart = ({ price, currentUser, setShowAuth }: CartProps) => {
-  const [rate, setRate] = useState(3010);
+const Cart = ({
+  price,
+  currentUser,
+  cartItems,
+  setShowAuth,
+  resetCart,
+}: CartProps) => {
+  const handleTotal = () => {
+    let total = 0;
+    cartItems.forEach((item) => {
+      total += item.price * item.quantity;
+    });
+    return total;
+  };
+  const [totalRate, setTotalRate] = useState(handleTotal());
   const [currency, setCurrency] = useState("$");
-  const nairaRate = rate * 712;
+  const nairaRate = totalRate * 712;
   const navigate = useNavigate();
+
+  // console.log(handleTotal());
 
   const handleNavigate = () => {
     if (currentUser === null) {
@@ -66,10 +70,10 @@ const Cart = ({ price, currentUser, setShowAuth }: CartProps) => {
 
   useEffect(() => {
     if (price === "NGN") {
-      setRate(nairaRate);
+      setTotalRate(nairaRate);
       setCurrency("₦");
     } else {
-      setRate(3010);
+      setTotalRate(handleTotal());
       setCurrency("$");
     }
   }, [price]);
@@ -80,13 +84,20 @@ const Cart = ({ price, currentUser, setShowAuth }: CartProps) => {
       metaDescription: " Proceed to checkout items in your fashion cart ",
     });
   }, []);
+  // console.log(removeItem(10));
   return (
     <>
       {cartItems.length ? (
         <main className={styles.container}>
           <section className={styles.wrapper}>
             <section className={styles.left}>
-              <h3>Cart ({cartItems.length})</h3>
+              <div className={styles.cartTitle}>
+                <h3>Cart ({cartItems.length ? cartItems.length : 0})</h3>
+                <span className={styles.resetCart} onClick={() => resetCart()}>
+                  reset cart
+                </span>
+              </div>
+
               <div className={styles.cardWrapper}>
                 {cartItems.map((item, index) => (
                   <CartCard
@@ -105,7 +116,7 @@ const Cart = ({ price, currentUser, setShowAuth }: CartProps) => {
                   <span>SUBTOTAL</span>
                   <span>
                     {currency}
-                    {roundNumber(rate)}
+                    {roundNumber(totalRate)}
                   </span>
                 </div>
                 <span className={styles.notice}>
@@ -131,9 +142,37 @@ const Cart = ({ price, currentUser, setShowAuth }: CartProps) => {
 const mapStateToProps = createStructuredSelector({
   price: selectToggleCurrency,
   currentUser: selectUserAuth,
+  cartItems: selectCartItem,
 });
 const mapDispatchToProps = (dispatch: Function) => ({
   setShowAuth: () => dispatch(handleToggleAuth()),
+  resetCart: () => dispatch(resetCart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+
+// const cartItems: {
+//   id: number;
+//   title: string;
+//   price: number;
+//   desc: string;
+//   vendor: string;
+//   img: string;
+// }[] = [
+//   {
+//     id: 1,
+//     title: "man fine plane trouser pant",
+//     price: 30,
+//     desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur",
+//     vendor: "my quality seller",
+//     img: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=600",
+//   },
+//   {
+//     id: 2,
+//     title: "man fine stock jeans jacket",
+//     price: 500,
+//     desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur  harum cum minima, perferendis porro tenetur",
+//     vendor: "my quality seller",
+//     img: "https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=600",
+//   },
+// ];

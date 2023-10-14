@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useState, useEffect } from "react";
 import styles from "./CartCard.module.less";
@@ -6,25 +7,36 @@ import { roundNumber } from "../../utility/roundNumber";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
+import { removeItemFromCart } from "../../redux/cartReducer/cart.action";
+// import { CartItemProps } from "../../redux/cartReducer/cart.type";
 
+interface CartItemProps {
+  id?: number;
+  title: string;
+  img: string;
+  price: number;
+  quantity: number;
+  desc: string;
+  vendor: string;
+}
 interface CardProps {
-  item: {
-    id: number;
-    title: string;
-    price: number;
-    desc: string;
-    vendor: string;
-    img: string;
-  };
+  item: CartItemProps;
   itemIndex: number;
   cartLength: number;
   price: string;
+  removeItem: (id: CartItemProps) => void;
 }
-const CartCard = ({ item, itemIndex, cartLength, price }: CardProps) => {
+const CartCard = ({
+  item,
+  itemIndex,
+  cartLength,
+  price,
+  removeItem,
+}: CardProps) => {
   const [quantity, setQuantity] = useState(1);
   const [rate, setRate] = useState(item.price);
   const [currency, setCurrency] = useState("$");
-  const nairaRate = rate * 712;
+  const nairaRate = rate! * 712;
   const lastItem = itemIndex + 1 === cartLength;
 
   useEffect(() => {
@@ -36,6 +48,9 @@ const CartCard = ({ item, itemIndex, cartLength, price }: CardProps) => {
       setCurrency("$");
     }
   }, [price]);
+
+  // console.log(removeItem(item.id));
+
   return (
     <div
       className={styles.container}
@@ -49,22 +64,22 @@ const CartCard = ({ item, itemIndex, cartLength, price }: CardProps) => {
           <div className={styles.cartProps}>
             <h4>{item.title}</h4>
             <span className={styles.mobilePrice}>
-              {currency}
-              {roundNumber(rate)}
+              {item.quantity} X {currency}
+              {roundNumber(rate!)}
             </span>
-            <p>{item.desc.substring(0, 50)}...</p>
+            <p>{item.desc}</p>
             <span>Seller: {item.vendor}</span>
           </div>
         </div>
         <div className={styles.right}>
           <span>
-            {currency}
-            {roundNumber(rate)}
+            {item.quantity} X {currency}
+            {roundNumber(rate!)}
           </span>
         </div>
       </div>
       <div className={styles.bottom}>
-        <div className={styles.left}>
+        <div className={styles.left} onClick={() => removeItem(item)}>
           <DeleteOutlineOutlinedIcon />
           <span>REMOVE</span>
         </div>
@@ -86,4 +101,10 @@ const CartCard = ({ item, itemIndex, cartLength, price }: CardProps) => {
 const mapStateToProps = createStructuredSelector({
   price: selectToggleCurrency,
 });
-export default connect(mapStateToProps)(CartCard);
+
+const mapDispatchToProps = (dispatch: Function) => ({
+  removeItem: (id: CartItemProps) => dispatch(removeItemFromCart(id)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(CartCard);
+
+// onClick={() => removeItem(item.id)}

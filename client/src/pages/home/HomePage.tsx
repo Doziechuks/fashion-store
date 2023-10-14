@@ -17,9 +17,9 @@ const HomePage = () => {
   return (
     <main className={styles.container}>
       <Slider />
-      <FeaturedProducts type="Featured" />
+      <FeaturedProducts type="featured" />
       <Category />
-      <FeaturedProducts type="Trending" />
+      <FeaturedProducts type="trending" />
     </main>
   );
 };
