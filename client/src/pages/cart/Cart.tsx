@@ -18,6 +18,7 @@ import { handleToggleAuth } from "../../redux/toggleReducer/toggle.action";
 import { selectCartItem } from "../../redux/cartReducer/cart.selector";
 // import { CartItemProps } from "../../redux/cartReducer/cart.type";
 import { resetCart } from "../../redux/cartReducer/cart.action";
+import { handleTotal } from "../../utility/handleTotal";
 
 interface CartItemProps {
   id?: number;
@@ -28,9 +29,18 @@ interface CartItemProps {
   desc: string;
   vendor: string;
 }
+interface CurrentUser {
+  token: string;
+  userEmail: string;
+}
+
+interface UserState {
+  token: string;
+  userAuth: null | CurrentUser;
+}
 interface CartProps {
   price: string;
-  currentUser: object | null;
+  currentUser: UserState;
   setShowAuth: () => void;
   cartItems: CartItemProps[];
   resetCart: () => void;
@@ -44,14 +54,7 @@ const Cart = ({
   setShowAuth,
   resetCart,
 }: CartProps) => {
-  const handleTotal = () => {
-    let total = 0;
-    cartItems.forEach((item) => {
-      total += item.price * item.quantity;
-    });
-    return total;
-  };
-  const [totalRate, setTotalRate] = useState(handleTotal());
+  const [totalRate, setTotalRate] = useState(handleTotal(cartItems));
   const [currency, setCurrency] = useState("$");
   const nairaRate = totalRate * 712;
   const navigate = useNavigate();
@@ -59,7 +62,7 @@ const Cart = ({
   // console.log(handleTotal());
 
   const handleNavigate = () => {
-    if (currentUser === null) {
+    if (!currentUser.token) {
       setShowAuth();
       return;
     } else {
@@ -73,7 +76,7 @@ const Cart = ({
       setTotalRate(nairaRate);
       setCurrency("₦");
     } else {
-      setTotalRate(handleTotal());
+      setTotalRate(handleTotal(cartItems));
       setCurrency("$");
     }
   }, [price]);

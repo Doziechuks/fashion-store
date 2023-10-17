@@ -1,0 +1,26 @@
+.itemSummary {
+  // border: 1px red solid;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  img {
+    // border: 1px red solid;
+    display: block;
+    height: 4rem;
+    width: 3.5rem;
+    object-fit: cover;
+    @media screen and (max-width: 790px) {
+      height: 3.5rem;
+      width: 3rem;
+    }
+  }
+  span {
+    color: #333;
+    font-size: 1.2rem;
+    @media screen and (max-width: 790px) {
+      font-size: 0.9rem;
+    }
+  }
+}

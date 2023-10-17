@@ -25,6 +25,7 @@ const ProductCategories = lazy(
 const ProductPage = lazy(() => import("./pages/product/ProductPage"));
 const CartPage = lazy(() => import("./pages/cart/Cart"));
 const CheckoutPage = lazy(() => import("./pages/checkout/Checkout"));
+const PaymentPage = lazy(() => import("./pages/payment/PaymentPage"));
 
 interface AuthProps {
   showAuth: boolean;
@@ -53,6 +54,7 @@ function App({ showAuth }: AuthProps) {
             path="/checkout"
             element={<ProtectedRoute Component={CheckoutPage} />}
           />
+          <Route path="/payment" element={<PaymentPage />} />
         </Routes>
       </Suspense>
       <NewLetter />

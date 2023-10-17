@@ -8,19 +8,29 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { axiosRequest } from "../../../helpers/axiosRequest";
 
 import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { selectUserAuth } from "../../../redux/userReducer/user.selector";
 import { handleUserAuth } from "../../../redux/userReducer/user.action";
 import { handleToggleAuth } from "../../../redux/toggleReducer/toggle.action";
+import Loader from "../../../utility/loader/Loader";
 
 const initialUser = { username: "", email: "", password: "" };
 
+interface CurrentUser {
+  token: string;
+  email: string;
+}
+
+interface UserState {
+  // [x: string]: string;
+  token: string;
+  userEmail: string;
+  name: string;
+  userAuth: null | CurrentUser;
+}
 interface UserProps {
-  currentUser: object | null;
-  setCurrentUser: (user: object) => void;
+  setCurrentUser: (user: UserState) => void;
   setShowAuth: () => void;
 }
-const Register = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
+const Register = ({ setCurrentUser, setShowAuth }: UserProps) => {
   const [user, setUser] = useState(initialUser);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +64,7 @@ const Register = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
           name: data.user.username,
           userEmail: data.user.email,
           token: data.jwt,
+          userAuth: null,
         });
         setShowAuth();
       }
@@ -77,11 +88,9 @@ const Register = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
     }
   };
 
-  console.log({ currentUser });
-
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
-      {isLoading && <span>loading...</span>}
+      {isLoading && <Loader />}
       {error && <span className={styles.error}>{error}</span>}
       <CustomInput
         placeholder="Username"
@@ -128,12 +137,9 @@ const Register = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectUserAuth,
-});
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({
-  setCurrentUser: (user: object) => dispatch(handleUserAuth(user)),
+  setCurrentUser: (user: UserState) => dispatch(handleUserAuth(user)),
   setShowAuth: () => dispatch(handleToggleAuth()),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(null, mapDispatchToProps)(Register);

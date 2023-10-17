@@ -8,20 +8,30 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { axiosRequest } from "../../../helpers/axiosRequest";
 
 import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { selectUserAuth } from "../../../redux/userReducer/user.selector";
 import { handleUserAuth } from "../../../redux/userReducer/user.action";
 import { handleToggleAuth } from "../../../redux/toggleReducer/toggle.action";
+import Loader from "../../../utility/loader/Loader";
 
 const initialUser = { identifier: "", password: "" };
+interface CurrentUser {
+  token: string;
+  email: string;
+}
+
+interface UserState {
+  // [x: string]: string;
+  token: string;
+  userEmail: string;
+  name: string;
+  userAuth: null | CurrentUser;
+}
 
 interface UserProps {
-  currentUser: object | null;
-  setCurrentUser: (user: object) => void;
+  setCurrentUser: (user: UserState) => void;
   setShowAuth: () => void;
 }
 
-const Signin = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
+const Signin = ({ setCurrentUser, setShowAuth }: UserProps) => {
   const [user, setUser] = useState(initialUser);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -51,6 +61,7 @@ const Signin = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
           name: data.user.username,
           userEmail: data.user.email,
           token: data.jwt,
+          userAuth: null,
         });
         setShowAuth();
         setUser(initialUser);
@@ -96,11 +107,11 @@ const Signin = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
       setUser(initialUser);
     }
   };
-  console.log({ currentUser });
+  // console.log({ currentUser });
 
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
-      {isLoading && <span>loading...</span>}
+      {isLoading && <Loader />}
       {error && <span className={styles.error}>{error}</span>}
       <CustomInput
         placeholder="Email"
@@ -142,12 +153,9 @@ const Signin = ({ currentUser, setCurrentUser, setShowAuth }: UserProps) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectUserAuth,
-});
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({
-  setCurrentUser: (user: object) => dispatch(handleUserAuth(user)),
+  setCurrentUser: (user: UserState) => dispatch(handleUserAuth(user)),
   setShowAuth: () => dispatch(handleToggleAuth()),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(Signin);
+export default connect(null, mapDispatchToProps)(Signin);

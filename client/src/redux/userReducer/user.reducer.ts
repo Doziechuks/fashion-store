@@ -1,14 +1,19 @@
 import { userActionType } from "./user.type";
 
+interface CurrentUser {
+  token: string;
+  email: string;
+}
+
 interface UserState {
-  userAuth: null | object; // Adjust the type according to your use case
+  userAuth: null | CurrentUser;
 }
 
 interface UserAction {
-  type: string; // Replace 'string' with your actual action types
-  payload: object | null; // Adjust the type according to your use case
+  type: string;
+  payload: object | null;
 }
-const INITIAL_STATE = {
+const INITIAL_STATE: UserState = {
   userAuth: null,
 };
 

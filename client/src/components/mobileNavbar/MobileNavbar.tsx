@@ -30,12 +30,23 @@ interface CartItemProps {
   desc: string;
   vendor: string;
 }
+interface CurrentUser {
+  token: string;
+  email: string;
+}
+
+interface UserState {
+  token: string;
+  userEmail: string;
+  name: string;
+  userAuth: null | CurrentUser;
+}
 interface AuthProps {
   setShowAuth: () => void;
   currency: string;
   setCurrency: (currency: string) => void;
-  currentUser: object | null;
-  setCurrentUser: (user: object | null) => void;
+  currentUser: UserState;
+  setCurrentUser: (user: UserState) => void;
   cartItems: CartItemProps[];
 }
 const MobileNavbar = ({
@@ -58,7 +69,12 @@ const MobileNavbar = ({
     // setOpen(false);
   };
   const handleLogOut = () => {
-    setCurrentUser(null);
+    setCurrentUser({
+      userAuth: null,
+      token: "",
+      userEmail: "",
+      name: "",
+    });
   };
 
   useEffect(() => {
@@ -81,13 +97,13 @@ const MobileNavbar = ({
     setPathName(pathname);
   }, [pathname]);
 
-  // console.log({ open });
+  // console.log({ currentUser });
 
   return (
     <nav className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.left}>
-          {currentUser !== null ? (
+          {currentUser.token ? (
             <div onClick={handleLogOut} className={styles.logout}>
               <img src={checkedUser} alt="user present" />
               <span> log out</span>
@@ -185,6 +201,6 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch: Function) => ({
   setShowAuth: () => dispatch(handleToggleAuth()),
   setCurrency: (e: string) => dispatch(handleCurrencyToggle(e)),
-  setCurrentUser: (user: object | null) => dispatch(handleUserAuth(user)),
+  setCurrentUser: (user: UserState) => dispatch(handleUserAuth(user)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(MobileNavbar);

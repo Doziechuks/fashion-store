@@ -32,12 +32,23 @@ interface CartItemProps {
   desc: string;
   vendor: string;
 }
+interface CurrentUser {
+  token: string;
+  email: string;
+}
+
+interface UserState {
+  token: string;
+  userEmail: string;
+  name: string;
+  userAuth: null | CurrentUser;
+}
 interface AuthProps {
   setShowAuth: () => void;
   currency: string;
   setCurrency: (currency: string) => void;
-  currentUser: object | null;
-  setCurrentUser: (user: object | null) => void;
+  currentUser: UserState;
+  setCurrentUser: (user: UserState) => void;
   cartItems: CartItemProps[];
 }
 const Navbar = ({
@@ -66,7 +77,12 @@ const Navbar = ({
   // console.log({ currency });
 
   const handleLogOut = () => {
-    setCurrentUser(null);
+    setCurrentUser({
+      userAuth: null,
+      token: "",
+      userEmail: "",
+      name: "",
+    });
   };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -168,7 +184,7 @@ const Navbar = ({
               onClick={handleSearchOpen}
             />
           </div>
-          {currentUser !== null ? (
+          {currentUser.token ? (
             <div onClick={handleLogOut} className={styles.logout}>
               <img src={checkedUser} alt="user present" />
               <span> log out</span>
@@ -207,6 +223,6 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch: Function) => ({
   setShowAuth: () => dispatch(handleToggleAuth()),
   setCurrency: (e: string) => dispatch(handleCurrencyToggle(e)),
-  setCurrentUser: (user: object | null) => dispatch(handleUserAuth(user)),
+  setCurrentUser: (user: UserState) => dispatch(handleUserAuth(user)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
