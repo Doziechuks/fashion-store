@@ -3,8 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.less";
 import { Link, useLocation } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-// import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-// import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";

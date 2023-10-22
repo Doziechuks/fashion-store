@@ -2,18 +2,20 @@ import { combineReducers } from "redux";
 import toggleReducer from "./toggleReducer/toggle.reducer";
 import userReducer from "./userReducer/user.reducer";
 import cartReducer from "./cartReducer/cart.reducer";
+import addressReducer from "./addressReducer/address.reducer";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["toggle", "user", "cart"],
+  whitelist: ["toggle", "user", "cart", "address"],
 };
 const rootReducer = combineReducers({
   toggle: toggleReducer,
   user: userReducer,
   cart: cartReducer,
+  address: addressReducer,
 });
 export default persistReducer(persistConfig, rootReducer);
 

@@ -35,6 +35,8 @@ interface CurrentUser {
 
 interface UserState {
   token: string;
+  userEmail: string;
+  id: number;
   userAuth: null | CurrentUser;
 }
 
@@ -67,7 +69,7 @@ const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
 
   const handleDeletAddress = async (id: number) => {
     const url = `/addresses/${id}`;
-    const userToken = currentUser && currentUser.token;
+    const userToken = currentUser && currentUser.userEmail;
     const headers = {
       Authorization: "bearer" + userToken,
     };
@@ -100,17 +102,17 @@ const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
 
   useEffect(() => {
     const handleFetch = async () => {
-      const url = "/addresses";
-      const userToken = currentUser && currentUser.token;
+      const url = `/addresses?user.id=${currentUser.id}`;
+      const userToken = currentUser && currentUser.userEmail;
       const headers = {
         Authorization: "bearer" + userToken,
       };
       try {
-        if (currentUser !== null) {
+        if (currentUser.token !== "") {
           setIsLoading(true);
           const { data } = await axiosRequest.get(url, { headers });
           if (data) {
-            // console.log(data);
+            console.log(data);
             setAddressResult(data.data);
           }
         }
@@ -141,7 +143,7 @@ const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
     }
   }, [price]);
 
-  // console.log({ error, isLoading, result });
+  // console.log(currentUser);
   if (isLoading) return <Spinner />;
 
   return (

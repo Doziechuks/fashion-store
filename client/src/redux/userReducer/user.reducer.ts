@@ -6,12 +6,12 @@ interface CurrentUser {
 }
 
 interface UserState {
-  userAuth: null | CurrentUser;
+  userAuth: CurrentUser | null;
 }
 
 interface UserAction {
-  type: string;
-  payload: object | null;
+  type: typeof userActionType.USER_AUTH;
+  payload: CurrentUser | null;
 }
 const INITIAL_STATE: UserState = {
   userAuth: null,

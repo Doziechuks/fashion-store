@@ -15,7 +15,9 @@ const useFetch = <T>(url: string) => {
       try {
         setIsLoading(true);
         const res = await fetchRequest.get<ApiResponse<T>>(url);
-        setData(res.data.data);
+        if (res) {
+          setData(res.data.data);
+        }
       } catch (error) {
         if (typeof error === "string") {
           setError(true);

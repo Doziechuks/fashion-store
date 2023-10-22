@@ -19,7 +19,9 @@ interface CurrentUser {
   email: string;
 }
 interface UserState {
-  token: UserState;
+  token: string;
+  userEmail: string;
+  id: number;
   userAuth: null | CurrentUser;
 }
 interface AddressProps {
@@ -47,11 +49,11 @@ const AddressForm = ({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const url = "http://localhost:1337/api/addresses";
+    const url = `http://localhost:1337/api/addresses?user.id=${currentUser.id}`;
     const name = user.fullName.trim();
     const phoneNumber = user.address.trim();
     const address = user.phoneNumber.trim();
-    const userToken = currentUser && currentUser.token;
+    const userToken = currentUser && currentUser.userEmail;
     const authToken = "bearer" + userToken;
     const headers = {
       Authorization: authToken,

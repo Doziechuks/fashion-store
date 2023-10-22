@@ -16,7 +16,6 @@ import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector"
 import { selectUserAuth } from "../../redux/userReducer/user.selector";
 import { handleToggleAuth } from "../../redux/toggleReducer/toggle.action";
 import { selectCartItem } from "../../redux/cartReducer/cart.selector";
-// import { CartItemProps } from "../../redux/cartReducer/cart.type";
 import { resetCart } from "../../redux/cartReducer/cart.action";
 import { handleTotal } from "../../utility/handleTotal";
 
@@ -34,13 +33,13 @@ interface CurrentUser {
   userEmail: string;
 }
 
-interface UserState {
-  token: string;
-  userAuth: null | CurrentUser;
-}
+// interface UserState {
+//   token: string;
+//   userAuth: null | CurrentUser;
+// }
 interface CartProps {
   price: string;
-  currentUser: UserState;
+  currentUser: CurrentUser;
   setShowAuth: () => void;
   cartItems: CartItemProps[];
   resetCart: () => void;
@@ -153,29 +152,3 @@ const mapDispatchToProps = (dispatch: Function) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);
-
-// const cartItems: {
-//   id: number;
-//   title: string;
-//   price: number;
-//   desc: string;
-//   vendor: string;
-//   img: string;
-// }[] = [
-//   {
-//     id: 1,
-//     title: "man fine plane trouser pant",
-//     price: 30,
-//     desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur",
-//     vendor: "my quality seller",
-//     img: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=600",
-//   },
-//   {
-//     id: 2,
-//     title: "man fine stock jeans jacket",
-//     price: 500,
-//     desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur  harum cum minima, perferendis porro tenetur",
-//     vendor: "my quality seller",
-//     img: "https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=600",
-//   },
-// ];

@@ -23,6 +23,7 @@ interface UserState {
   token: string;
   userEmail: string;
   name: string;
+  id: number;
   userAuth: null | CurrentUser;
 }
 
@@ -61,6 +62,7 @@ const Signin = ({ setCurrentUser, setShowAuth }: UserProps) => {
           name: data.user.username,
           userEmail: data.user.email,
           token: data.jwt,
+          id: data.user.id,
           userAuth: null,
         });
         setShowAuth();

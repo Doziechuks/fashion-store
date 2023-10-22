@@ -1,10 +1,15 @@
 import { toggleActionType } from "./toggle.type";
 
 interface ToggleState {
-  [x: string]: string | boolean;
   authToggle: boolean;
   currency: string;
 }
+
+interface CurrencyToggleAction {
+  type: typeof toggleActionType.CURRENCY_TOGGLE;
+  payload: string;
+}
+type ToggleActionTypes = CurrencyToggleAction;
 
 const INITIAL_STATE = {
   authToggle: false,
@@ -13,8 +18,8 @@ const INITIAL_STATE = {
 
 const toggleReducer = (
   state: ToggleState = INITIAL_STATE,
-  action: ToggleState
-) => {
+  action: ToggleActionTypes
+): ToggleState => {
   switch (action.type) {
     case toggleActionType.AUTH_TOGGLE:
       return {
