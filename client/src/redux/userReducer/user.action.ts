@@ -1,14 +1,10 @@
-import { userActionType } from "./user.type";
+import { UserActionType, CurrentUserProps } from "./user.type";
 
-interface CurrentUser {
-  token: string;
-  email: string;
-}
+// interface UserState {
+//   currentUser: CurrentUserProps | null;
+// }
 
-interface UserState {
-  userAuth: null | CurrentUser;
-}
-export const handleUserAuth = (user: UserState) => ({
-  type: userActionType.USER_AUTH,
+export const handleUserAuth = (user: CurrentUserProps | null) => ({
+  type: UserActionType.USER_AUTH,
   payload: user,
 });

@@ -13,11 +13,12 @@ import { handleScrollTop } from "../../utility/scrollToTop";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
-import { selectUserAuth } from "../../redux/userReducer/user.selector";
 import { handleToggleAuth } from "../../redux/toggleReducer/toggle.action";
 import { selectCartItem } from "../../redux/cartReducer/cart.selector";
 import { resetCart } from "../../redux/cartReducer/cart.action";
 import { handleTotal } from "../../utility/handleTotal";
+import { selectCurrentUser } from "../../redux/userReducer/user.selector";
+import { CurrentUserProps } from "../../redux/userReducer/user.type";
 
 interface CartItemProps {
   id?: number;
@@ -28,31 +29,16 @@ interface CartItemProps {
   desc: string;
   vendor: string;
 }
-interface CurrentUser {
-  token: string;
-  userEmail: string;
-}
-
-// interface UserState {
-//   token: string;
-//   userAuth: null | CurrentUser;
-// }
 interface CartProps {
   price: string;
-  currentUser: CurrentUser;
   setShowAuth: () => void;
   cartItems: CartItemProps[];
   resetCart: () => void;
-  // removeItem: (id: CartItemProps) => void;
+  currentUser: CurrentUserProps | null;
 }
 
-const Cart = ({
-  price,
-  currentUser,
-  cartItems,
-  setShowAuth,
-  resetCart,
-}: CartProps) => {
+const Cart = (props: CartProps) => {
+  const { price, cartItems, setShowAuth, resetCart, currentUser } = props;
   const [totalRate, setTotalRate] = useState(handleTotal(cartItems));
   const [currency, setCurrency] = useState("$");
   const nairaRate = totalRate * 712;
@@ -61,7 +47,7 @@ const Cart = ({
   // console.log(handleTotal());
 
   const handleNavigate = () => {
-    if (!currentUser.token) {
+    if (!currentUser) {
       setShowAuth();
       return;
     } else {
@@ -143,8 +129,8 @@ const Cart = ({
 
 const mapStateToProps = createStructuredSelector({
   price: selectToggleCurrency,
-  currentUser: selectUserAuth,
   cartItems: selectCartItem,
+  currentUser: selectCurrentUser,
 });
 const mapDispatchToProps = (dispatch: Function) => ({
   setShowAuth: () => dispatch(handleToggleAuth()),

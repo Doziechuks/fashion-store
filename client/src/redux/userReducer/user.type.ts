@@ -1,8 +1,11 @@
-export const userActionType = {
-  USER_AUTH: "USER_AUTH",
-};
+export enum UserActionType {
+  USER_AUTH = "USER_AUTH",
+  // Add other action types here
+}
 
-// export interface UserAuthAction {
-//   type: typeof userActionType.USER_AUTH;
-//   payload: object; // Replace 'object' with the actual type of your payload
-// }
+export interface CurrentUserProps {
+  token: string;
+  id: number;
+  name: string;
+  userEmail: string;
+}

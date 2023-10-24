@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { FormEvent, ChangeEvent, useState } from "react";
+import { FormEvent, ChangeEvent, useState, useEffect } from "react";
 
 import CustomButton from "../customButton/CustomButton";
 import CustomInput from "../customInput/CustomInput";
@@ -7,34 +7,27 @@ import styles from "./AddressForm.module.less";
 // import { axiosRequest } from "../../helpers/axiosRequest";
 import axios from "axios";
 
+import Loader from "../../utility/loader/Loader";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { selectUserAuth } from "../../redux/userReducer/user.selector";
-import Loader from "../../utility/loader/Loader";
+import { selectCurrentUser } from "../../redux/userReducer/user.selector";
+import { CurrentUserProps } from "../../redux/userReducer/user.type";
 
-const initialUser = { fullName: "", phoneNumber: "", address: "" };
+const initialUser = {
+  fullName: "",
+  phoneNumber: "",
+  address: "",
+};
 
-interface CurrentUser {
-  token: string;
-  email: string;
-}
-interface UserState {
-  token: string;
-  userEmail: string;
-  id: number;
-  userAuth: null | CurrentUser;
-}
 interface AddressProps {
   setShowAddress: (e: boolean) => void;
-  currentUser: UserState;
   setCheckNewAddress: (prop: string) => void;
+  currentUser: CurrentUserProps | null;
 }
 
-const AddressForm = ({
-  setShowAddress,
-  currentUser,
-  setCheckNewAddress,
-}: AddressProps) => {
+const AddressForm = (props: AddressProps) => {
+  const { setShowAddress, setCheckNewAddress, currentUser } = props;
+
   const [user, setUser] = useState(initialUser);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -49,11 +42,11 @@ const AddressForm = ({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const url = `http://localhost:1337/api/addresses?user.id=${currentUser.id}`;
+    const url = `http://localhost:1337/api/addresses`;
     const name = user.fullName.trim();
     const phoneNumber = user.address.trim();
     const address = user.phoneNumber.trim();
-    const userToken = currentUser && currentUser.userEmail;
+    const userToken = currentUser?.token;
     const authToken = "bearer" + userToken;
     const headers = {
       Authorization: authToken,
@@ -63,19 +56,33 @@ const AddressForm = ({
       if (name === "" || phoneNumber === "" || address === "") {
         setError("Input cannot be empty");
         return;
-      }
-      setIsLoading(true);
-      const res = await axios.post(url, { data: user }, { headers });
-      if (res) {
-        // console.log(res);
-        setCheckNewAddress("new");
+      } else if (!currentUser?.token) {
+        setError("Please make sure you are signed in");
+        return;
+      } else {
+        setIsLoading(true);
+        const res = await axios.post(
+          url,
+          {
+            data: {
+              ...user,
+              userId: String(currentUser?.id),
+            },
+          },
+          { headers }
+        );
+        if (res) {
+          // console.log(res);
+          setCheckNewAddress("new");
+        }
       }
     } catch (error: unknown) {
       if (typeof error === "string") {
         setError("something went wrong");
+        // console.log(error);
       } else if (error instanceof Error) {
         setError("something went wrong");
-        console.log(error.message);
+        // console.log(error.message);
       }
     } finally {
       setIsLoading(false);
@@ -83,6 +90,14 @@ const AddressForm = ({
       setShowAddress(true);
     }
   };
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setError("");
+    }, 2000);
+
+    return () => clearTimeout(timerId);
+  }, []);
 
   // console.log({ currentUser });
 
@@ -133,6 +148,7 @@ const AddressForm = ({
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectUserAuth,
+  currentUser: selectCurrentUser,
 });
+
 export default connect(mapStateToProps)(AddressForm);

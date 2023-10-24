@@ -7,8 +7,9 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
 import { selectCartItem } from "../../redux/cartReducer/cart.selector";
-import { selectUserAuth } from "../../redux/userReducer/user.selector";
 import { roundNumber } from "../../utility/roundNumber";
+import { selectCurrentUser } from "../../redux/userReducer/user.selector";
+import { CurrentUserProps } from "../../redux/userReducer/user.type";
 
 interface CartItemProps {
   id?: number;
@@ -19,28 +20,15 @@ interface CartItemProps {
   desc: string;
   vendor: string;
 }
-interface CurrentUser {
-  token: string;
-  email: string;
-}
-
-interface UserState {
-  // [x: string]: string;
-  token: string;
-  userEmail: string;
-  userAuth: null | CurrentUser;
-}
 
 interface PaymentProps {
   price: string;
   cartItems: CartItemProps[];
-  currentUser: UserState;
+  currentUser: CurrentUserProps | null;
 }
 const PaymentPage = ({ cartItems, currentUser }: PaymentProps) => {
   const total = handleTotal(cartItems);
-  const user = currentUser?.userEmail;
-
-  // console.log({ total, user });
+  const user = currentUser ? currentUser?.userEmail : "";
 
   return (
     <main className={styles.container}>
@@ -58,6 +46,6 @@ const PaymentPage = ({ cartItems, currentUser }: PaymentProps) => {
 const mapStateToProps = createStructuredSelector({
   price: selectToggleCurrency,
   cartItems: selectCartItem,
-  currentUser: selectUserAuth,
+  currentUser: selectCurrentUser,
 });
 export default connect(mapStateToProps)(PaymentPage);

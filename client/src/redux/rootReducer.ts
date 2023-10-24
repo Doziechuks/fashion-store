@@ -13,18 +13,11 @@ const persistConfig = {
 };
 const rootReducer = combineReducers({
   toggle: toggleReducer,
-  user: userReducer,
   cart: cartReducer,
   address: addressReducer,
+  user: userReducer,
 });
+
 export default persistReducer(persistConfig, rootReducer);
 
 export type RootState = ReturnType<typeof rootReducer>;
-
-// const rootReducer = combineReducers({
-//   user: userReducer,
-//   cart: cartReducer,
-//   directory: directoryReducer,
-//   shop: shopReducer,
-// });
-// export default persistReducer(persistConfig, rootReducer);

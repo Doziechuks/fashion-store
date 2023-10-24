@@ -3,7 +3,7 @@ import { RootState } from "../rootReducer";
 
 const selectUser = (state: RootState) => state.user;
 
-export const selectUserAuth = createSelector(
+export const selectCurrentUser = createSelector(
   [selectUser],
-  (user) => user.userAuth
+  (user) => user.currentUser
 );

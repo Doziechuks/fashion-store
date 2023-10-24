@@ -13,11 +13,13 @@ import AddressForm from "../../components/addressForm/AddressForm";
 import CheckoutButton from "../../components/checkoutButton/CheckoutButton";
 import { selectCartItem } from "../../redux/cartReducer/cart.selector";
 import CheckoutBox from "../../components/checkoutBox/CheckoutBox";
-import { selectUserAuth } from "../../redux/userReducer/user.selector";
 import { axiosRequest } from "../../helpers/axiosRequest";
 import { handleTotal } from "../../utility/handleTotal";
 import Spinner from "../../components/spinner/Spinner";
 import { useNavigate } from "react-router-dom";
+import { selectCurrentUser } from "../../redux/userReducer/user.selector";
+import { CurrentUserProps } from "../../redux/userReducer/user.type";
+import { Seo } from "../../utility/seo";
 
 interface CartItemProps {
   id?: number;
@@ -28,18 +30,6 @@ interface CartItemProps {
   desc: string;
   vendor: string;
 }
-interface CurrentUser {
-  token: string;
-  userEmail: string;
-}
-
-interface UserState {
-  token: string;
-  userEmail: string;
-  id: number;
-  userAuth: null | CurrentUser;
-}
-
 interface AttributeProps {
   fullName: string;
   address: string;
@@ -53,7 +43,7 @@ interface Address {
 interface CheckoutProps {
   price: string;
   cartItems: CartItemProps[];
-  currentUser: UserState;
+  currentUser: CurrentUserProps | null;
 }
 const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
   const [totalRate, setTotalRate] = useState(handleTotal(cartItems));
@@ -66,10 +56,11 @@ const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
   const [selected, setSelected] = useState(0);
   const nairaRate = totalRate * 712;
   const navigate = useNavigate();
+  // const [testUser] = useState("user");
 
   const handleDeletAddress = async (id: number) => {
     const url = `/addresses/${id}`;
-    const userToken = currentUser && currentUser.userEmail;
+    const userToken = currentUser?.token;
     const headers = {
       Authorization: "bearer" + userToken,
     };
@@ -102,19 +93,26 @@ const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
 
   useEffect(() => {
     const handleFetch = async () => {
-      const url = `/addresses?user.id=${currentUser.id}`;
-      const userToken = currentUser && currentUser.userEmail;
+      const url = `/addresses?[filters][userId][$eq]=${String(
+        currentUser?.id
+      )}`;
+      const userToken = currentUser?.token;
       const headers = {
         Authorization: "bearer" + userToken,
       };
       try {
-        if (currentUser.token !== "") {
+        if (currentUser?.token) {
           setIsLoading(true);
           const { data } = await axiosRequest.get(url, { headers });
           if (data) {
-            console.log(data);
+            // const filteredAddress = data.data.filter(
+            //   (item) => item.attributes.user === String(currentUser.id)
+            // );
             setAddressResult(data.data);
           }
+        } else {
+          setError("Please make sure you are signed in");
+          return;
         }
       } catch (error: unknown) {
         if (typeof error === "string") {
@@ -134,6 +132,14 @@ const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
   }, [currentUser, checkNewAddress]);
 
   useEffect(() => {
+    const timerId = setTimeout(() => {
+      setError("");
+    }, 2000);
+
+    return () => clearTimeout(timerId);
+  }, []);
+
+  useEffect(() => {
     if (price === "NGN") {
       setTotalRate(nairaRate);
       setCurrency("₦");
@@ -143,7 +149,15 @@ const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
     }
   }, [price]);
 
-  // console.log(currentUser);
+  useEffect(() => {
+    Seo({
+      title: "Checkout || Proceed to make payments",
+      metaDescription:
+        "A swift and easy way to checkou and pay for purchased products at fashionstore",
+    });
+  }, []);
+
+  // console.log({ currentUser });
   if (isLoading) return <Spinner />;
 
   return (
@@ -233,19 +247,6 @@ const Checkout = ({ price, cartItems, currentUser }: CheckoutProps) => {
 const mapStateToProps = createStructuredSelector({
   price: selectToggleCurrency,
   cartItems: selectCartItem,
-  currentUser: selectUserAuth,
+  currentUser: selectCurrentUser,
 });
 export default connect(mapStateToProps)(Checkout);
-
-{
-  /* <div className={styles.itemSummary}>
-            <img
-              src="https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=600"
-              alt="productImage"
-            />
-            <span>
-              1 X {currency}
-              {roundNumber(rate)}
-            </span>
-          </div> */
-}

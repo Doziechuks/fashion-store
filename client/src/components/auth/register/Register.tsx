@@ -8,30 +8,18 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { axiosRequest } from "../../../helpers/axiosRequest";
 
 import { connect } from "react-redux";
-import { handleUserAuth } from "../../../redux/userReducer/user.action";
 import { handleToggleAuth } from "../../../redux/toggleReducer/toggle.action";
+import { handleUserAuth } from "../../../redux/userReducer/user.action";
 import Loader from "../../../utility/loader/Loader";
+import { CurrentUserProps } from "../../../redux/userReducer/user.type";
 
 const initialUser = { username: "", email: "", password: "" };
 
-interface CurrentUser {
-  token: string;
-  email: string;
-}
-
-interface UserState {
-  // [x: string]: string;
-  token: string;
-  userEmail: string;
-  name: string;
-  id: number;
-  userAuth: null | CurrentUser;
-}
 interface UserProps {
-  setCurrentUser: (user: UserState) => void;
   setShowAuth: () => void;
+  setCurrentUser: (user: CurrentUserProps | null) => void;
 }
-const Register = ({ setCurrentUser, setShowAuth }: UserProps) => {
+const Register = ({ setShowAuth, setCurrentUser }: UserProps) => {
   const [user, setUser] = useState(initialUser);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -61,12 +49,12 @@ const Register = ({ setCurrentUser, setShowAuth }: UserProps) => {
       setIsLoading(true);
       const { data } = await axiosRequest.post(url, user);
       if (data) {
+        // console.log(data);
         setCurrentUser({
-          name: data.user.username,
-          userEmail: data.user.email,
           token: data.jwt,
           id: data.user.id,
-          userAuth: null,
+          name: data.user.username,
+          userEmail: data.user.email,
         });
         setShowAuth();
       }
@@ -141,7 +129,8 @@ const Register = ({ setCurrentUser, setShowAuth }: UserProps) => {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({
-  setCurrentUser: (user: UserState) => dispatch(handleUserAuth(user)),
+  setCurrentUser: (user: CurrentUserProps | null) =>
+    dispatch(handleUserAuth(user)),
   setShowAuth: () => dispatch(handleToggleAuth()),
 });
 export default connect(null, mapDispatchToProps)(Register);

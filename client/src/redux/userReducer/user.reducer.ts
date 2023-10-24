@@ -1,28 +1,23 @@
-import { userActionType } from "./user.type";
-
-interface CurrentUser {
-  token: string;
-  email: string;
-}
+import { UserActionType, CurrentUserProps } from "./user.type";
 
 interface UserState {
-  userAuth: CurrentUser | null;
+  currentUser: CurrentUserProps | null;
+}
+interface UserAction {
+  type: UserActionType;
+  payload: CurrentUserProps | null;
 }
 
-interface UserAction {
-  type: typeof userActionType.USER_AUTH;
-  payload: CurrentUser | null;
-}
 const INITIAL_STATE: UserState = {
-  userAuth: null,
+  currentUser: null,
 };
 
 const userReducer = (state: UserState = INITIAL_STATE, action: UserAction) => {
   switch (action.type) {
-    case userActionType.USER_AUTH:
+    case UserActionType.USER_AUTH:
       return {
         ...state,
-        userAuth: action.payload,
+        currentUser: action.payload,
       };
     default:
       return state;

@@ -14,8 +14,6 @@ import Spinner from "../../components/spinner/Spinner";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
-// import { selectCartItem } from "../../redux/cartReducer/cart.selector";
-// import { CartItemProps } from "../../redux/cartReducer/cart.type";
 import { addItemToCart } from "../../redux/cartReducer/cart.action";
 
 export interface CartItemProps {

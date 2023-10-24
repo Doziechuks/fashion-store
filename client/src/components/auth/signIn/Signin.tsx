@@ -8,31 +8,19 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { axiosRequest } from "../../../helpers/axiosRequest";
 
 import { connect } from "react-redux";
-import { handleUserAuth } from "../../../redux/userReducer/user.action";
 import { handleToggleAuth } from "../../../redux/toggleReducer/toggle.action";
 import Loader from "../../../utility/loader/Loader";
+import { CurrentUserProps } from "../../../redux/userReducer/user.type";
+import { handleUserAuth } from "../../../redux/userReducer/user.action";
 
 const initialUser = { identifier: "", password: "" };
-interface CurrentUser {
-  token: string;
-  email: string;
-}
-
-interface UserState {
-  // [x: string]: string;
-  token: string;
-  userEmail: string;
-  name: string;
-  id: number;
-  userAuth: null | CurrentUser;
-}
 
 interface UserProps {
-  setCurrentUser: (user: UserState) => void;
   setShowAuth: () => void;
+  setCurrentUser: (user: CurrentUserProps | null) => void;
 }
 
-const Signin = ({ setCurrentUser, setShowAuth }: UserProps) => {
+const Signin = ({ setShowAuth, setCurrentUser }: UserProps) => {
   const [user, setUser] = useState(initialUser);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -58,12 +46,12 @@ const Signin = ({ setCurrentUser, setShowAuth }: UserProps) => {
       setIsLoading(true);
       const { data } = await axiosRequest.post(url, user);
       if (data.jwt) {
+        // console.log(data);
         setCurrentUser({
-          name: data.user.username,
-          userEmail: data.user.email,
           token: data.jwt,
           id: data.user.id,
-          userAuth: null,
+          name: data.user.username,
+          userEmail: data.user.email,
         });
         setShowAuth();
         setUser(initialUser);
@@ -157,7 +145,8 @@ const Signin = ({ setCurrentUser, setShowAuth }: UserProps) => {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({
-  setCurrentUser: (user: UserState) => dispatch(handleUserAuth(user)),
   setShowAuth: () => dispatch(handleToggleAuth()),
+  setCurrentUser: (user: CurrentUserProps | null) =>
+    dispatch(handleUserAuth(user)),
 });
 export default connect(null, mapDispatchToProps)(Signin);

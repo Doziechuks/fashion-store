@@ -94,6 +94,7 @@ const ProductCategories = () => {
       window.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
   useEffect(() => {
     Seo({
       title: "Women product category",
@@ -258,56 +259,3 @@ const ProductCategories = () => {
 };
 
 export default ProductCategories;
-
-// {
-//    <CategoryList
-//             catId={catId}
-//             sort={sort}
-//             maxPrice={maxPrice}
-//             selectedCat={selectedSubCats}
-//           />
-// }
-
-// useEffect(() => {
-//   const fetchCat = async () => {
-//     try {
-//       const res = await fetchRequest.get(
-//         `/categories?populate=*&[filters][uid][$eq]=${catId}`
-//       );
-//       if (res) {
-//         setCatData(res.data.data);
-//       }
-//     } catch (error) {
-//       if (typeof error === "string") {
-//         setCatError(true);
-//       } else {
-//         setCatError(true);
-//       }
-//     }
-//   };
-//   fetchCat();
-//   return () => {};
-// }, [catId]);
-
-{
-  /* <div className={styles.inputBox}>
-                <input
-                  type="checkbox"
-                  id="1"
-                  value={1}
-                  checked={selectedSubCats.includes(1)}
-                  onChange={() => handleChange(1)}
-                />
-                <label htmlFor="1">skirts</label>
-              </div>
-              <div className={styles.inputBox}>
-                <input
-                  type="checkbox"
-                  id="2"
-                  value={2}
-                  checked={selectedSubCats.includes(2)}
-                  onChange={() => handleChange(2)}
-                />
-                <label htmlFor="2">hats</label>
-              </div> */
-}

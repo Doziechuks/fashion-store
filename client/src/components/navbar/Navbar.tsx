@@ -17,9 +17,10 @@ import {
   handleCurrencyToggle,
 } from "../../redux/toggleReducer/toggle.action";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
-import { selectUserAuth } from "../../redux/userReducer/user.selector";
-import { handleUserAuth } from "../../redux/userReducer/user.action";
 import { selectCartItem } from "../../redux/cartReducer/cart.selector";
+import { selectCurrentUser } from "../../redux/userReducer/user.selector";
+import { handleUserAuth } from "../../redux/userReducer/user.action";
+import { CurrentUserProps } from "../../redux/userReducer/user.type";
 
 interface CartItemProps {
   id?: number;
@@ -30,33 +31,24 @@ interface CartItemProps {
   desc: string;
   vendor: string;
 }
-interface CurrentUser {
-  token: string;
-  email: string;
-}
 
-interface UserState {
-  token: string;
-  userEmail: string;
-  name: string;
-  userAuth: null | CurrentUser;
-}
 interface AuthProps {
   setShowAuth: () => void;
   currency: string;
   setCurrency: (currency: string) => void;
-  currentUser: UserState;
-  setCurrentUser: (user: UserState) => void;
   cartItems: CartItemProps[];
+  currentUser: CurrentUserProps | null;
+  setCurrentUser: (user: CurrentUserProps | null) => void;
 }
-const Navbar = ({
-  setShowAuth,
-  currency,
-  setCurrency,
-  currentUser,
-  setCurrentUser,
-  cartItems,
-}: AuthProps) => {
+const Navbar = (props: AuthProps) => {
+  const {
+    setShowAuth,
+    currency,
+    setCurrency,
+    cartItems,
+    currentUser,
+    setCurrentUser,
+  } = props;
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [pathName, setPathName] = useState("");
@@ -72,15 +64,11 @@ const Navbar = ({
   const handleSearchOpen = () => {
     setSearchOpen((prev) => !prev);
   };
-  // console.log({ currency });
+
+  // console.log({ currentUser });
 
   const handleLogOut = () => {
-    setCurrentUser({
-      userAuth: null,
-      token: "",
-      userEmail: "",
-      name: "",
-    });
+    setCurrentUser(null);
   };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -119,7 +107,7 @@ const Navbar = ({
     setPathName(pathname);
   }, [pathname]);
 
-  // console.log(cartItems);
+  // console.log(currentUser);
 
   return (
     <nav className={styles.container}>
@@ -182,7 +170,7 @@ const Navbar = ({
               onClick={handleSearchOpen}
             />
           </div>
-          {currentUser.token ? (
+          {currentUser ? (
             <div onClick={handleLogOut} className={styles.logout}>
               <img src={checkedUser} alt="user present" />
               <span> log out</span>
@@ -214,13 +202,14 @@ const Navbar = ({
 };
 const mapStateToProps = createStructuredSelector({
   currency: selectToggleCurrency,
-  currentUser: selectUserAuth,
   cartItems: selectCartItem,
+  currentUser: selectCurrentUser,
 });
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({
   setShowAuth: () => dispatch(handleToggleAuth()),
   setCurrency: (e: string) => dispatch(handleCurrencyToggle(e)),
-  setCurrentUser: (user: UserState) => dispatch(handleUserAuth(user)),
+  setCurrentUser: (user: CurrentUserProps | null) =>
+    dispatch(handleUserAuth(user)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
