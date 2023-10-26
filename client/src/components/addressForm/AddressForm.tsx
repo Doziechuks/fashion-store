@@ -4,7 +4,7 @@ import { FormEvent, ChangeEvent, useState, useEffect } from "react";
 import CustomButton from "../customButton/CustomButton";
 import CustomInput from "../customInput/CustomInput";
 import styles from "./AddressForm.module.less";
-// import { axiosRequest } from "../../helpers/axiosRequest";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 
 import Loader from "../../utility/loader/Loader";
@@ -106,6 +106,9 @@ const AddressForm = (props: AddressProps) => {
       <div className={styles.titleBox}>
         <h2>Add deliver address details</h2>
         <span>All fields are required</span>
+      </div>
+      <div onClick={() => setShowAddress(true)} className={styles.backArrow}>
+        <ArrowBackIcon />
       </div>
       {error && <span className={styles.errorMessage}>{error}</span>}
       {isLoading && <Loader />}

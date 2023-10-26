@@ -89,7 +89,8 @@ const MobileNavbar = (props: AuthProps) => {
     <nav className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.left}>
-          {currentUser ? (
+          {pathname.includes("/checkout") ||
+          pathname.includes("/payment") ? null : currentUser ? (
             <div onClick={handleLogOut} className={styles.logout}>
               <img src={checkedUser} alt="user present" />
               <span> log out</span>
@@ -99,13 +100,6 @@ const MobileNavbar = (props: AuthProps) => {
               <img src={userClose} alt="no user" />
             </span>
           )}
-          {/* <div onClick={() => setShowAuth()}>
-            {user ? (
-              <PersonOutlineIcon sx={{ fontSize: "1.7rem" }} />
-            ) : (
-              <PersonOffOutlinedIcon sx={{ fontSize: "1.7rem" }} />
-            )}
-          </div> */}
           <div className={styles.search}>
             <SearchIcon />
           </div>

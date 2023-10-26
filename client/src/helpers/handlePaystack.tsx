@@ -1,19 +1,29 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PaystackButton } from "react-paystack";
+import { useNavigate } from "react-router-dom";
+
+import { connect } from "react-redux";
+import { resetCart } from "../redux/cartReducer/cart.action";
 
 interface PaymentProps {
   total: number;
   user: string;
+  resetCart: () => void;
 }
 
-const HandlePayment = ({ total, user }: PaymentProps) => {
+const HandlePayment = ({ total, user, resetCart }: PaymentProps) => {
   const cash = total * 100;
   const toNaira = cash * 712;
-  const publicKey = "pk_test_28ace95a0c5d19ba9a4d635c7854a2c8ef0e873d";
+  const publicKey = import.meta.env.VITE_REACT_APP_PAYSTACK_TOKEN;
+  const navigate = useNavigate();
 
   const handleSuccess = (reference: any) => {
     console.log(reference);
     alert("Payment successful");
+    navigate("/");
+    resetCart();
   };
 
   const handleClosedSession = () => {
@@ -37,5 +47,7 @@ const HandlePayment = ({ total, user }: PaymentProps) => {
 
   return <PaystackButton {...componentProps} />;
 };
-
-export default HandlePayment;
+const mapDispatchToProps = (dispatch: Function) => ({
+  resetCart: () => dispatch(resetCart()),
+});
+export default connect(null, mapDispatchToProps)(HandlePayment);

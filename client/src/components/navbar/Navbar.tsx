@@ -170,7 +170,8 @@ const Navbar = (props: AuthProps) => {
               onClick={handleSearchOpen}
             />
           </div>
-          {currentUser ? (
+          {pathname.includes("/checkout") ||
+          pathname.includes("/payment") ? null : currentUser ? (
             <div onClick={handleLogOut} className={styles.logout}>
               <img src={checkedUser} alt="user present" />
               <span> log out</span>

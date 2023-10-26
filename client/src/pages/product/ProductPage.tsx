@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { useState, useEffect } from "react";
 import styles from "./Product.module.less";
-import { roundNumber } from "../../utility/roundNumber";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BalanceIcon from "@mui/icons-material/Balance";
@@ -15,6 +14,7 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
 import { addItemToCart } from "../../redux/cartReducer/cart.action";
+import ProductItem from "../../components/productItem/ProductItem";
 
 export interface CartItemProps {
   id: number;
@@ -53,10 +53,7 @@ const ProductPage = ({ price, setCartItems }: ProductProp) => {
   );
 
   const [selectedImg, setSelectedImg] = useState("img1");
-  const [rate, setRate] = useState(data?.attributes?.price);
-  const [currency, setCurrency] = useState("$");
   const [quantity, setQuantity] = useState(1);
-  const nairaRate = rate! * 712;
   let currentImg = "";
 
   const img1 = `http://localhost:1337${data?.attributes?.img1?.data?.attributes?.url}`;
@@ -70,16 +67,6 @@ const ProductPage = ({ price, setCartItems }: ProductProp) => {
   } else {
     currentImg = img2;
   }
-
-  useEffect(() => {
-    if (price === "NGN") {
-      setRate(nairaRate);
-      setCurrency("₦");
-    } else {
-      setRate(data?.attributes?.price);
-      setCurrency("$");
-    }
-  }, [price]);
 
   const title = data?.attributes?.title;
   // console.log(title);
@@ -122,12 +109,12 @@ const ProductPage = ({ price, setCartItems }: ProductProp) => {
       </section>
       <section className={styles.right}>
         <div className={styles.top}>
-          <h2>{data?.attributes?.title}</h2>
-          <span className={styles.price}>
-            {currency}
-            {roundNumber(rate!)}
-          </span>
-          <p className={styles.desc}>{data?.attributes?.desc}</p>
+          <ProductItem
+            title={data ? data?.attributes?.title : ""}
+            desc={data ? data?.attributes.desc : ""}
+            itemPrice={data ? data?.attributes?.price : 0}
+            price={price}
+          />
           <div className={styles.quantity}>
             <button
               disabled={quantity <= 1 ? true : false}
