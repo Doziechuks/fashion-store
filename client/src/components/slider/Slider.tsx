@@ -2,12 +2,11 @@ import { useState } from "react";
 import styles from "./Slider.module.less";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import women from "../../assets/women col.jpg";
+import men from "../../assets/men col.jpg";
+import children from "../../assets/children col.jpg";
 
-const data: string[] = [
-  "https://images.pexels.com/photos/1549200/pexels-photo-1549200.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  "https://images.pexels.com/photos/949670/pexels-photo-949670.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  "https://images.pexels.com/photos/837140/pexels-photo-837140.jpeg?auto=compress&cs=tinysrgb&w=1600",
-];
+const data: string[] = [women, men, children];
 
 const Slider = () => {
   const [curentSlide, setCurrentSlide] = useState(0);
@@ -55,3 +54,7 @@ const Slider = () => {
 };
 
 export default Slider;
+
+// "https://images.pexels.com/photos/1549200/pexels-photo-1549200.jpeg?auto=compress&cs=tinysrgb&w=1600",
+// "https://images.pexels.com/photos/949670/pexels-photo-949670.jpeg?auto=compress&cs=tinysrgb&w=1600",
+// "https://images.pexels.com/photos/837140/pexels-photo-837140.jpeg?auto=compress&cs=tinysrgb&w=1600",

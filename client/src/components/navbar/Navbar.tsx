@@ -3,12 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.less";
 import { Link, useLocation } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { handleScrollTop } from "../../utility/scrollToTop";
+import checkedUser from "../../assets/User_Check.svg";
+import userClose from "../../assets/User_Close.svg";
 
 import { createStructuredSelector } from "reselect";
 import { connect } from "react-redux";
@@ -17,19 +17,43 @@ import {
   handleCurrencyToggle,
 } from "../../redux/toggleReducer/toggle.action";
 import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
+import { selectCartItem } from "../../redux/cartReducer/cart.selector";
+import { selectCurrentUser } from "../../redux/userReducer/user.selector";
+import { handleUserAuth } from "../../redux/userReducer/user.action";
+import { CurrentUserProps } from "../../redux/userReducer/user.type";
+
+interface CartItemProps {
+  id?: number;
+  title: string;
+  img: string;
+  price: number;
+  quantity: number;
+  desc: string;
+  vendor: string;
+}
 
 interface AuthProps {
   setShowAuth: () => void;
   currency: string;
   setCurrency: (currency: string) => void;
+  cartItems: CartItemProps[];
+  currentUser: CurrentUserProps | null;
+  setCurrentUser: (user: CurrentUserProps | null) => void;
 }
-const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
+const Navbar = (props: AuthProps) => {
+  const {
+    setShowAuth,
+    currency,
+    setCurrency,
+    cartItems,
+    currentUser,
+    setCurrentUser,
+  } = props;
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [pathName, setPathName] = useState("");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLDivElement | null>(null);
-  const user: boolean = false;
   const { pathname } = useLocation();
 
   const handleCurrencyChange = (newCurrency: string) => {
@@ -40,8 +64,12 @@ const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
   const handleSearchOpen = () => {
     setSearchOpen((prev) => !prev);
   };
-  // console.log({ currency });
 
+  // console.log({ currentUser });
+
+  const handleLogOut = () => {
+    setCurrentUser(null);
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -78,6 +106,8 @@ const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
   useEffect(() => {
     setPathName(pathname);
   }, [pathname]);
+
+  // console.log(currentUser);
 
   return (
     <nav className={styles.container}>
@@ -140,19 +170,25 @@ const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
               onClick={handleSearchOpen}
             />
           </div>
-          <span onClick={() => setShowAuth()}>
-            {user ? (
-              <PersonOutlineIcon sx={{ fontSize: "1.7rem" }} />
-            ) : (
-              <PersonOffOutlinedIcon sx={{ fontSize: "1.7rem" }} />
-            )}
-          </span>
+          {pathname.includes("/checkout") ||
+          pathname.includes("/payment") ? null : currentUser ? (
+            <div onClick={handleLogOut} className={styles.logout}>
+              <img src={checkedUser} alt="user present" />
+              <span> log out</span>
+            </div>
+          ) : (
+            <span onClick={() => setShowAuth()}>
+              <img src={userClose} alt="no user" />
+            </span>
+          )}
           <span>
             <FavoriteBorderIcon sx={{ fontSize: "1.7rem" }} />
           </span>
           <Link to="/cart" className={styles.cartBox} onClick={handleScrollTop}>
             <ShoppingCartOutlinedIcon sx={{ fontSize: "1.7rem" }} />
-            <span className={styles.cartCircle}>0</span>
+            <span className={styles.cartCircle}>
+              {cartItems?.length ? cartItems?.length : 0}
+            </span>
           </Link>
         </div>
       </div>
@@ -167,10 +203,14 @@ const Navbar = ({ setShowAuth, currency, setCurrency }: AuthProps) => {
 };
 const mapStateToProps = createStructuredSelector({
   currency: selectToggleCurrency,
+  cartItems: selectCartItem,
+  currentUser: selectCurrentUser,
 });
 // eslint-disable-next-line @typescript-eslint/ban-types
 const mapDispatchToProps = (dispatch: Function) => ({
   setShowAuth: () => dispatch(handleToggleAuth()),
   setCurrency: (e: string) => dispatch(handleCurrencyToggle(e)),
+  setCurrentUser: (user: CurrentUserProps | null) =>
+    dispatch(handleUserAuth(user)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

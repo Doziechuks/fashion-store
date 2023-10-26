@@ -18,3 +18,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+.outOfStock {
+  /* border: 1px red solid; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* margin-top: 5rem; */
+  .img {
+    /* border: 1px red solid; */
+    display: block;
+    width: 20rem;
+    height: 10rem;
+    /* object-fit: contain; */
+    margin-bottom: 1rem;
+  }
+  .text {
+    /* border: 1px red solid; */
+    color: #333;
+    font-size: 1.3rem;
+  }
+}

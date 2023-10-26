@@ -1,58 +1,67 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable react-refresh/only-export-components */
 import { useEffect, useState } from "react";
 import styles from "./Cart.module.less";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
 import { roundNumber } from "../../utility/roundNumber";
 import CartCard from "../../components/cartCart/CartCard";
 import Empty from "../empty/Empty";
 import { Seo } from "../../utility/seo";
 import { handleScrollTop } from "../../utility/scrollToTop";
 
-interface CartProps {
-  price: string;
-}
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector";
+import { handleToggleAuth } from "../../redux/toggleReducer/toggle.action";
+import { selectCartItem } from "../../redux/cartReducer/cart.selector";
+import { resetCart } from "../../redux/cartReducer/cart.action";
+import { handleTotal } from "../../utility/handleTotal";
+import { selectCurrentUser } from "../../redux/userReducer/user.selector";
+import { CurrentUserProps } from "../../redux/userReducer/user.type";
 
-const cartItems: {
-  id: number;
+interface CartItemProps {
+  id?: number;
   title: string;
+  img: string;
   price: number;
+  quantity: number;
   desc: string;
   vendor: string;
-  img: string;
-}[] = [
-  {
-    id: 1,
-    title: "man fine plane trouser pant",
-    price: 30,
-    desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur",
-    vendor: "my quality seller",
-    img: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=600",
-  },
-  {
-    id: 2,
-    title: "man fine stock jeans jacket",
-    price: 500,
-    desc: "elit. Quam saepe eos necessitatibus harum cum minima, perferendis porro tenetur  harum cum minima, perferendis porro tenetur",
-    vendor: "my quality seller",
-    img: "https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&w=600",
-  },
-];
+}
+interface CartProps {
+  price: string;
+  setShowAuth: () => void;
+  cartItems: CartItemProps[];
+  resetCart: () => void;
+  currentUser: CurrentUserProps | null;
+}
 
-const Cart = ({ price }: CartProps) => {
-  const [rate, setRate] = useState(3010);
+const Cart = (props: CartProps) => {
+  const { price, cartItems, setShowAuth, resetCart, currentUser } = props;
+  const [totalRate, setTotalRate] = useState(handleTotal(cartItems));
   const [currency, setCurrency] = useState("$");
-  const nairaRate = rate * 712;
+  const nairaRate = totalRate * 712;
+  const navigate = useNavigate();
+
+  // console.log(handleTotal());
+
+  const handleNavigate = () => {
+    if (!currentUser) {
+      setShowAuth();
+      return;
+    } else {
+      navigate("/checkout");
+      handleScrollTop();
+    }
+  };
 
   useEffect(() => {
     if (price === "NGN") {
-      setRate(nairaRate);
+      setTotalRate(nairaRate);
       setCurrency("₦");
     } else {
-      setRate(3010);
+      setTotalRate(handleTotal(cartItems));
       setCurrency("$");
     }
   }, [price]);
@@ -63,13 +72,20 @@ const Cart = ({ price }: CartProps) => {
       metaDescription: " Proceed to checkout items in your fashion cart ",
     });
   }, []);
+  // console.log(removeItem(10));
   return (
     <>
       {cartItems.length ? (
         <main className={styles.container}>
           <section className={styles.wrapper}>
             <section className={styles.left}>
-              <h3>Cart ({cartItems.length})</h3>
+              <div className={styles.cartTitle}>
+                <h3>Cart ({cartItems.length ? cartItems.length : 0})</h3>
+                <span className={styles.resetCart} onClick={() => resetCart()}>
+                  reset cart
+                </span>
+              </div>
+
               <div className={styles.cardWrapper}>
                 {cartItems.map((item, index) => (
                   <CartCard
@@ -88,25 +104,21 @@ const Cart = ({ price }: CartProps) => {
                   <span>SUBTOTAL</span>
                   <span>
                     {currency}
-                    {roundNumber(rate)}
+                    {roundNumber(totalRate)}
                   </span>
                 </div>
                 <span className={styles.notice}>
                   Delivery fees not included yet
                 </span>
               </div>
-              <Link to="/checkout" onClick={handleScrollTop}>
+              <span onClick={handleNavigate} className={styles.navigate}>
                 PROCEED TO CHECKOUT
-              </Link>
+              </span>
             </section>
           </section>
-          <Link
-            to="/checkout"
-            onClick={handleScrollTop}
-            className={styles.mobileBtn}
-          >
+          <span onClick={handleNavigate} className={styles.mobileBtn}>
             PROCEED TO CHECKOUT
-          </Link>
+          </span>
         </main>
       ) : (
         <Empty title="Your Empty is Cart!!" />
@@ -117,5 +129,12 @@ const Cart = ({ price }: CartProps) => {
 
 const mapStateToProps = createStructuredSelector({
   price: selectToggleCurrency,
+  cartItems: selectCartItem,
+  currentUser: selectCurrentUser,
 });
-export default connect(mapStateToProps)(Cart);
+const mapDispatchToProps = (dispatch: Function) => ({
+  setShowAuth: () => dispatch(handleToggleAuth()),
+  resetCart: () => dispatch(resetCart()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

@@ -28,15 +28,28 @@
     .left {
       // border: 1px red solid;
       width: 100%;
-      max-width: 3.8rem;
+      max-width: fit-content;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      div {
+      .search {
         // border: 1px red solid;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-left: 0.4rem;
+      }
+      .logout {
+        // border: 1px red solid;
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        span {
+          font-size: 0.8rem;
+          text-transform: capitalize;
+        }
       }
     }
     .center {

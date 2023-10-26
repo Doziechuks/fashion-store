@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-refresh/only-export-components */
 import { useEffect, useState } from "react";
 import styles from "./Card.module.less";
@@ -11,6 +12,7 @@ import { selectToggleCurrency } from "../../redux/toggleReducer/toggle.selector"
 
 interface CardProps {
   item: {
+    [x: string]: any;
     id: number;
     img: string;
     img2?: string;
@@ -24,13 +26,16 @@ interface CardProps {
 }
 
 const Card = ({ item, isList, price }: CardProps) => {
-  const [oldRate, setOldRate] = useState(item.oldPrice);
-  const [rate, setRate] = useState(item.price);
+  const { attributes } = item;
+  const [oldRate, setOldRate] = useState(attributes.oldPrice);
+  const [rate, setRate] = useState(attributes.price);
   const [currency, setCurrency] = useState("$");
   const nairaRate = rate * 712;
   const nairaOldRate = oldRate * 712;
 
-  // console.log({ price });
+  const img1 = `http://localhost:1337${attributes?.img1?.data?.attributes?.url}`;
+  const img2 = `http://localhost:1337${attributes?.img2?.data[0]?.attributes?.url}`;
+  // console.log(img2);
 
   useEffect(() => {
     if (price === "NGN") {
@@ -38,8 +43,8 @@ const Card = ({ item, isList, price }: CardProps) => {
       setRate(nairaRate);
       setCurrency("₦");
     } else {
-      setOldRate(item.oldPrice);
-      setRate(item.price);
+      setOldRate(attributes.oldPrice);
+      setRate(attributes.price);
       setCurrency("$");
     }
   }, [price]);
@@ -50,11 +55,11 @@ const Card = ({ item, isList, price }: CardProps) => {
       onClick={handleScrollTop}
     >
       <div className={styles.cardImage}>
-        {item.isNew && <span className={styles.new}>New Season</span>}
-        <img src={item?.img} alt="card image" className={styles.img} />
-        <img src={item?.img2} alt="card image" className={styles.img2} />
+        {attributes.isNew && <span className={styles.new}>New Season</span>}
+        <img src={img1} alt="card image" className={styles.img} />
+        <img src={img2} alt="card image" className={styles.img2} />
       </div>
-      <h4>{item?.title}</h4>
+      <h4>{attributes?.title}</h4>
       <div className={styles.priceBox}>
         <span className={styles.oldPrice}>
           {currency}

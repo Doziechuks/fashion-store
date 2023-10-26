@@ -1,13 +1,28 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useState, ChangeEvent, FormEvent } from "react";
 import styles from "./Signin.module.less";
 import CustomInput from "../../customInput/CustomInput";
 import CustomButton from "../../customButton/CustomButton";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import { axiosRequest } from "../../../helpers/axiosRequest";
+
+import { connect } from "react-redux";
+import { handleToggleAuth } from "../../../redux/toggleReducer/toggle.action";
+import Loader from "../../../utility/loader/Loader";
+import { CurrentUserProps } from "../../../redux/userReducer/user.type";
+import { handleUserAuth } from "../../../redux/userReducer/user.action";
 
 const initialUser = { identifier: "", password: "" };
-const Signin = () => {
+
+interface UserProps {
+  setShowAuth: () => void;
+  setCurrentUser: (user: CurrentUserProps | null) => void;
+}
+
+const Signin = ({ setShowAuth, setCurrentUser }: UserProps) => {
   const [user, setUser] = useState(initialUser);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
 
@@ -20,16 +35,73 @@ const Signin = () => {
     setError("");
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (user.identifier.trim() === "") {
-      setError("Input cannot be empty");
+    const url = `/auth/local`;
+    try {
+      if (user.identifier.trim() === "" || user.password.trim() === "") {
+        setError("Input cannot be empty");
+        return;
+      }
+      setIsLoading(true);
+      const { data } = await axiosRequest.post(url, user);
+      if (data.jwt) {
+        // console.log(data);
+        setCurrentUser({
+          token: data.jwt,
+          id: data.user.id,
+          name: data.user.username,
+          userEmail: data.user.email,
+        });
+        setShowAuth();
+        setUser(initialUser);
+      }
+    } catch (error: unknown) {
+      if (typeof error === "string") {
+        setError("something went wrong");
+      } else if (error instanceof Error) {
+        if (error.message === "Request failed with status code 400") {
+          setError("Invalid email or password");
+        } else {
+          setError("something went wrong");
+        }
+      }
+    } finally {
+      setIsLoading(false);
     }
-    setUser(initialUser);
   };
+  const handleForgotPassword = async () => {
+    const url = "/auth/forgot-password";
+    try {
+      if (user.identifier.trim() === "") {
+        setError("Please provide your email");
+      }
+      setIsLoading(true);
+      const res = await axiosRequest.post(url, {
+        email: user.identifier,
+      });
+      if (res) {
+        console.log(res);
+      } else {
+        console.log("no response");
+      }
+    } catch (error: unknown) {
+      if (typeof error === "string") {
+        setError("something went wrong");
+        console.log(error);
+      } else if (error instanceof Error) {
+        console.log(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+      setUser(initialUser);
+    }
+  };
+  // console.log({ currentUser });
 
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
+      {isLoading && <Loader />}
       {error && <span className={styles.error}>{error}</span>}
       <CustomInput
         placeholder="Email"
@@ -64,8 +136,17 @@ const Signin = () => {
         </span>
       </div>
       <CustomButton>SIGN IN</CustomButton>
+      <div className={styles.forgotPassword} onClick={handleForgotPassword}>
+        forgot password?
+      </div>
     </form>
   );
 };
 
-export default Signin;
+// eslint-disable-next-line @typescript-eslint/ban-types
+const mapDispatchToProps = (dispatch: Function) => ({
+  setShowAuth: () => dispatch(handleToggleAuth()),
+  setCurrentUser: (user: CurrentUserProps | null) =>
+    dispatch(handleUserAuth(user)),
+});
+export default connect(null, mapDispatchToProps)(Signin);

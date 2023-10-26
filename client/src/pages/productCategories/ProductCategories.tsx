@@ -4,6 +4,46 @@ import { useParams } from "react-router-dom";
 import CategoryList from "../../components/categotyList/CategoryList";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { Seo } from "../../utility/seo";
+import useFetch from "../../customHooks/useFetch";
+import Spinner from "../../components/spinner/Spinner";
+
+interface SubCategory {
+  id: number;
+  attributes: {
+    title: string;
+    // Add other attributes as needed
+  };
+}
+interface ProductContent {
+  id: number;
+  attributes: {
+    title: string;
+    // Add other attributes as needed
+  };
+}
+
+interface ProductAttributes {
+  title: string;
+  img: {
+    data: {
+      attributes: {
+        url: string;
+      };
+    };
+  };
+  sub_categories: {
+    data: SubCategory[];
+  };
+  products: {
+    data: ProductContent[];
+  };
+  // Add other attributes as needed
+}
+
+interface ProductData {
+  attributes: ProductAttributes;
+  // Add other attributes as needed
+}
 
 const ProductCategories = () => {
   const catId = useParams().id;
@@ -11,11 +51,22 @@ const ProductCategories = () => {
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [sort, setSort] = useState<string>("asc");
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-
   const [open, setOpen] = useState<boolean>(false);
 
+  const { data, error, isLoading } = useFetch<ProductData[]>(
+    `/categories?populate=*&[filters][uid][$eq]=${catId}`
+  );
+
+  // console.log({ sort, selectedSubCats });
+
+  // console.log(data && data[0]?.attributes?.products?.data);
+  // const catData = data && data[0]?.attributes?.products?.data;
+  const subCategories = data && data[0]?.attributes?.sub_categories?.data;
+  // console.log(subCategories);
+
+  // return;
   const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value, 10);
+    const newValue = parseInt(e.target.value);
     setMaxPrice(newValue);
   };
 
@@ -43,6 +94,7 @@ const ProductCategories = () => {
       window.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
   useEffect(() => {
     Seo({
       title: "Women product category",
@@ -50,6 +102,15 @@ const ProductCategories = () => {
         "Find quality and pocket friendly women's fashion products at fashionstore ",
     });
   }, []);
+
+  // console.log(catData);
+  const catImg =
+    data &&
+    `http://localhost:1337${data[0]?.attributes?.img?.data?.attributes?.url}`;
+
+  // console.log(catImg);
+  if (isLoading) return <Spinner />;
+  if (error) return <h1>something went wrong</h1>;
   return (
     <>
       <main className={styles.container}>
@@ -61,28 +122,22 @@ const ProductCategories = () => {
         </section>
         <section className={styles.left}>
           <div className={styles.top}>
-            <h3>women categories</h3>
+            <h3>{data && data[0]?.attributes?.title} categories</h3>
             <div className={styles.inputWrapper}>
-              <div className={styles.inputBox}>
-                <input
-                  type="checkbox"
-                  id="1"
-                  value={1}
-                  checked={selectedSubCats.includes(1)}
-                  onChange={() => handleChange(1)}
-                />
-                <label htmlFor="1">skirts</label>
-              </div>
-              <div className={styles.inputBox}>
-                <input
-                  type="checkbox"
-                  id="2"
-                  value={2}
-                  checked={selectedSubCats.includes(2)}
-                  onChange={() => handleChange(2)}
-                />
-                <label htmlFor="2">hats</label>
-              </div>
+              {subCategories?.map((item) => (
+                <div className={styles.inputBox} key={item.id}>
+                  <input
+                    type="checkbox"
+                    id={String(item.id)}
+                    value={String(item.id)}
+                    checked={selectedSubCats.includes(item.id)}
+                    onChange={() => handleChange(item.id)}
+                  />
+                  <label htmlFor={String(item.id)}>
+                    {item?.attributes?.title}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
           <div className={styles.center}>
@@ -109,7 +164,7 @@ const ProductCategories = () => {
                   name="price"
                   onChange={() => setSort("asc")}
                 />
-                <label htmlFor="1">highest price</label>
+                <label htmlFor="1">lowest price first</label>
               </div>
               <div className={styles.inputBox}>
                 <input
@@ -119,50 +174,43 @@ const ProductCategories = () => {
                   name="price"
                   onChange={() => setSort("desc")}
                 />
-                <label htmlFor="2">lowest price</label>
+                <label htmlFor="2">highest price first</label>
               </div>
             </div>
           </div>
         </section>
         <section className={styles.right}>
           <div className={styles.imgBanner}>
-            <img
-              src="https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=600"
-              alt="category banner"
-            />
+            <img src={catImg!} alt="category banner" />
           </div>
-          <CategoryList
-            catId={catId}
-            sort={sort}
-            maxPrice={maxPrice}
-            selectedCat={selectedSubCats}
-          />
+          {
+            <CategoryList
+              catId={catId}
+              sort={sort}
+              maxPrice={maxPrice}
+              selectedCat={selectedSubCats}
+            />
+          }
         </section>
       </main>
       <div className={styles.options} style={{ left: open ? "0" : "-50rem" }}>
         <div className={styles.mobileTop}>
-          <h3>women categories</h3>
+          <h3>{data && data[0]?.attributes?.title} categories</h3>
           <div className={styles.inputWrapper}>
-            <div className={styles.inputBox}>
-              <input
-                type="checkbox"
-                id="1"
-                value={1}
-                checked={selectedSubCats.includes(1)}
-                onChange={() => handleChange(1)}
-              />
-              <label htmlFor="1">skirts</label>
-            </div>
-            <div className={styles.inputBox}>
-              <input
-                type="checkbox"
-                id="2"
-                value={2}
-                checked={selectedSubCats.includes(2)}
-                onChange={() => handleChange(2)}
-              />
-              <label htmlFor="2">hats</label>
-            </div>
+            {subCategories?.map((item) => (
+              <div className={styles.inputBox} key={item.id}>
+                <input
+                  type="checkbox"
+                  id={String(item.id)}
+                  value={String(item.id)}
+                  checked={selectedSubCats.includes(item.id)}
+                  onChange={() => handleChange(item.id)}
+                />
+                <label htmlFor={String(item.id)}>
+                  {item?.attributes?.title}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
         <div className={styles.line} />
@@ -191,7 +239,7 @@ const ProductCategories = () => {
                 name="price"
                 onChange={() => setSort("asc")}
               />
-              <label htmlFor="1">highest price</label>
+              <label htmlFor="1">lowest price first</label>
             </div>
             <div className={styles.inputBox}>
               <input
@@ -201,7 +249,7 @@ const ProductCategories = () => {
                 name="price"
                 onChange={() => setSort("desc")}
               />
-              <label htmlFor="2">lowest price</label>
+              <label htmlFor="2">highest price first</label>
             </div>
           </div>
         </div>
