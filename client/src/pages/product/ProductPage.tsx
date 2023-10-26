@@ -56,10 +56,10 @@ const ProductPage = ({ price, setCartItems }: ProductProp) => {
   const [quantity, setQuantity] = useState(1);
   let currentImg = "";
 
-  const img1 = `http://localhost:1337${data?.attributes?.img1?.data?.attributes?.url}`;
+  const img1 = `https://fashion-store-gcc4.onrender.com${data?.attributes?.img1?.data?.attributes?.url}`;
   const img2Array = data?.attributes?.img2?.data;
   const img2 = Array.isArray(img2Array)
-    ? `http://localhost:1337${img2Array[0]?.attributes?.url}`
+    ? `https://fashion-store-gcc4.onrender.com${img2Array[0]?.attributes?.url}`
     : "";
 
   if (selectedImg === "img1") {

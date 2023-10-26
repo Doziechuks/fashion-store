@@ -33,8 +33,8 @@ const Card = ({ item, isList, price }: CardProps) => {
   const nairaRate = rate * 712;
   const nairaOldRate = oldRate * 712;
 
-  const img1 = `http://localhost:1337${attributes?.img1?.data?.attributes?.url}`;
-  const img2 = `http://localhost:1337${attributes?.img2?.data[0]?.attributes?.url}`;
+  const img1 = `https://fashion-store-gcc4.onrender.com${attributes?.img1?.data?.attributes?.url}`;
+  const img2 = `https://fashion-store-gcc4.onrender.com${attributes?.img2?.data[0]?.attributes?.url}`;
   // console.log(img2);
 
   useEffect(() => {

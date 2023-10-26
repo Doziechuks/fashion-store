@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchRequest } from "../helpers/axiosRequest";
+import { axiosRequest } from "../helpers/axiosRequest";
 
 interface ApiResponse<T> {
   data: T;
@@ -14,7 +14,7 @@ const useFetch = <T>(url: string) => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const res = await fetchRequest.get<ApiResponse<T>>(url);
+        const res = await axiosRequest.get<ApiResponse<T>>(url);
         if (res) {
           setData(res.data.data);
         }

@@ -5,13 +5,14 @@ import CustomButton from "../customButton/CustomButton";
 import CustomInput from "../customInput/CustomInput";
 import styles from "./AddressForm.module.less";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import axios from "axios";
+// import axios from "axios";
 
 import Loader from "../../utility/loader/Loader";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../redux/userReducer/user.selector";
 import { CurrentUserProps } from "../../redux/userReducer/user.type";
+import { axiosRequest } from "../../helpers/axiosRequest";
 
 const initialUser = {
   fullName: "",
@@ -42,7 +43,7 @@ const AddressForm = (props: AddressProps) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const url = `http://localhost:1337/api/addresses`;
+    const url = `addresses`;
     const name = user.fullName.trim();
     const phoneNumber = user.address.trim();
     const address = user.phoneNumber.trim();
@@ -61,7 +62,7 @@ const AddressForm = (props: AddressProps) => {
         return;
       } else {
         setIsLoading(true);
-        const res = await axios.post(
+        const res = await axiosRequest.post(
           url,
           {
             data: {
