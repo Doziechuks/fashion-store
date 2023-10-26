@@ -106,7 +106,7 @@ const ProductCategories = () => {
   // console.log(catData);
   const catImg =
     data &&
-    `http://localhost:1337${data[0]?.attributes?.img?.data?.attributes?.url}`;
+    `https://fashion-store-gcc4.onrender.com${data[0]?.attributes?.img?.data?.attributes?.url}`;
 
   // console.log(catImg);
   if (isLoading) return <Spinner />;
